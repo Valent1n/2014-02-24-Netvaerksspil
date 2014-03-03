@@ -1,13 +1,19 @@
 package game;
 
+//TODO
+// Få player ind i et observer pattern
+// Player implementerer subject
+// Map implementerer observer
+
 public class Player {
+int id;
 String name;
 int xpos;
 int ypos;
 int point;
 String direction;
 
-public Player (String name) {
+public Player (String name, int id) {
 	this.name = name;
 	xpos = 9;
 	ypos = 7;

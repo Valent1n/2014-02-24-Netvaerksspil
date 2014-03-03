@@ -1,10 +1,6 @@
 package game;
-import java.awt.*;
-import java.awt.event.*;
-import java.awt.Color;
-import java.awt.GridLayout;
-import javax.swing.*;
-import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 public class gameplayer {
 	
 	// Players start values
@@ -14,56 +10,18 @@ public class gameplayer {
 	
 	private String wall = "w";
 	private KeyClass ko;
+	private Set<Player> players;
 	ScoreList slist;
 
 	
 // level is defined column by column
-	private String[][] level = {
-			{ "w", "w", "w", "w", "w", "w", "w", "w", "w", "w", "w", "w",
-					"w", "w", "w", "w", "w", "w", "w", "w" },
-			{ "w", "e", "e", "e", "e", "e", "e", "e", "e", "w", "w", "e", "e",
-					"e", "e", "e", "e", "e", "e", "w" },
-			{ "w", "e", "w", "e", "e", "w", "e", "e", "w", "w", "w", "e", "w",
-					"e", "e", "w", "e", "e", "w", "w" },
-			{ "w", "e", "w", "e", "e", "w", "e", "e", "e", "w", "w", "e", "w",
-					"e", "e", "w", "e", "e", "w", "w" },
-			{ "w", "e", "e", "w", "e", "e", "e", "e", "e", "e", "e", "e", "e",
-					"e", "e", "e", "e", "e", "e", "w" },
-			{ "w", "e", "w", "e", "w", "e", "w", "e", "w", "e", "w", "e", "w",
-					"e", "e", "w", "e", "e", "w", "w" },
-			{ "w", "e", "w", "e", "e", "e", "e", "e", "w", "w", "w", "e", "w",
-					"e", "e", "w", "e", "e", "w", "w" },
-			{ "w", "e", "w", "e", "e", "e", "e", "e", "w", "e", "w", "e", "w",
-					"e", "e", "w", "e", "e", "w", "w" },
-			{ "w", "e", "e", "e", "w", "e", "w", "e", "e", "w", "e", "e", "w",
-					"e", "e", "w", "e", "e", "e", "w" },
-			{ "w", "e", "e", "e", "e", "e", "w", "e", "e", "w", "e", "e", "w",
-					"e", "e", "w", "e", "e", "e", "w" },
-			{ "w", "e", "w", "w", "e", "w", "w", "e", "e", "e", "e", "e", "e",
-					"e", "e", "w", "e", "e", "w", "w" },
-			{ "w", "e", "e", "w", "e", "w", "e", "e", "e", "e", "w", "e", "e",
-					"e", "e", "w", "e", "e", "w", "w" },
-			{ "w", "e", "e", "e", "e", "e", "e", "e", "e", "w", "w", "e", "w",
-					"e", "e", "w", "e", "e", "w", "w" },
-			{ "w", "e", "e", "e", "e", "e", "e", "e", "e", "e", "w", "e", "w",
-					"e", "e", "w", "e", "e", "w", "w" },
-			{ "w", "e", "e", "e", "e", "e", "e", "e", "e", "w", "e", "e", "e",
-					"e", "e", "w", "e", "e", "w", "w" },
-			{ "w", "e", "e", "w", "e", "e", "e", "e", "e", "e", "e", "e", "e",
-					"e", "e", "e", "e", "e", "w", "w" },
-			{ "w", "e", "e", "w", "e", "w", "w", "w", "e", "e", "w", "e", "w",
-					"e", "e", "w", "w", "e", "w", "w" },
-			{ "w", "e", "w", "e", "e", "e", "e", "e", "e", "w", "w", "e", "w",
-					"e", "e", "e", "e", "e", "w", "w" },
-			{ "w", "e", "e", "e", "w", "e", "e", "e", "w", "w", "e", "e", "w",
-					"e", "e", "e", "e", "e", "e", "w" },
-			{ "w", "w", "w", "w", "w", "w", "w", "w", "w", "w", "w", "w",
-					"w", "w", "w", "w", "w", "w", "w", "w" }, };
+	private String[][] level;
 	// level is defined column by column
 	Screen screen; 
 
-	public gameplayer(Player me, ScoreList s) {
-	
+	public gameplayer(Player me, ScoreList s, String[][] level) {
+		this.level = level;
+		players = new HashSet<Player>();
 		this.me = me;
 		this.slist = s;
 		screen = new Screen(level,me.getXpos(),me.getYpos());
@@ -75,7 +33,8 @@ public class gameplayer {
 	
 
 
-	public void PlayerMoved(String direction) {
+	public void PlayerMoved(String direction, int id) {
+		//TODO Spilleren med id fra parameter bevæges
 		me.direction = direction;
 		int x = me.getXpos(),y = me.getYpos();
 		if (direction.equals("right")) {
