@@ -33,32 +33,32 @@ public class gameplayer {
 	
 
 
-	public void PlayerMoved(String direction, int id) {
+	public void PlayerMoved(String direction, Player player) {
 		//TODO Spilleren med id fra parameter bevæges
-		me.direction = direction;
-		int x = me.getXpos(),y = me.getYpos();
+		player.direction = direction;
+		int x = player.getXpos(),y = player.getYpos();
 		if (direction.equals("right")) {
-			x = me.getXpos() + 1;
+			x = player.getXpos() + 1;
 		};
 		if (direction.equals("left")) {
-			x = me.getXpos() - 1;
+			x = player.getXpos() - 1;
 		};
 		if (direction.equals("up")) {
-			y = me.getYpos() - 1;
+			y = player.getYpos() - 1;
 		};
 		if (direction.equals("down")) {
-			y = me.getYpos() + 1;
+			y = player.getYpos() + 1;
 		};
 		if (level[x][y].equals(wall)) {
-			me.subOnePoint();
-			slist.updateScoreOnScreen(me);
+			player.subOnePoint();
+			slist.updateScoreOnScreen(player);
 		} 
 		else {
-			me.addOnePoint();
-			slist.updateScoreOnScreen(me);
-			screen.movePlayerOnScreen(me.getXpos(), me.getYpos(), x, y,me.getDirection());
-			me.setXpos(x);
-			me.setYpos(y);
+			player.addOnePoint();
+			slist.updateScoreOnScreen(player);
+			screen.movePlayerOnScreen(player.getXpos(), player.getYpos(), x, y,player.getDirection());
+			player.setXpos(x);
+			player.setYpos(y);
 		}
 	}
 }
