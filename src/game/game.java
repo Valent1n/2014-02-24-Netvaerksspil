@@ -18,6 +18,48 @@ public class game {
 		System.out.println("Indtast dit spillernavn");
 		BufferedReader b = new BufferedReader (new InputStreamReader(System.in));
 		String in = b.readLine();
+		
+		 String[][] level = {
+					{ "w", "w", "w", "w", "w", "w", "w", "w", "w", "w", "w", "w",
+							"w", "w", "w", "w", "w", "w", "w", "w" },
+					{ "w", "e", "e", "e", "e", "e", "e", "e", "e", "w", "w", "e", "e",
+							"e", "e", "e", "e", "e", "e", "w" },
+					{ "w", "e", "w", "e", "e", "w", "e", "e", "w", "w", "w", "e", "w",
+							"e", "e", "w", "e", "e", "w", "w" },
+					{ "w", "e", "w", "e", "e", "w", "e", "e", "e", "w", "w", "e", "w",
+							"e", "e", "w", "e", "e", "w", "w" },
+					{ "w", "e", "e", "w", "e", "e", "e", "e", "e", "e", "e", "e", "e",
+							"e", "e", "e", "e", "e", "e", "w" },
+					{ "w", "e", "w", "e", "w", "e", "w", "e", "w", "e", "w", "e", "w",
+							"e", "e", "w", "e", "e", "w", "w" },
+					{ "w", "e", "w", "e", "e", "e", "e", "e", "w", "w", "w", "e", "w",
+							"e", "e", "w", "e", "e", "w", "w" },
+					{ "w", "e", "w", "e", "e", "e", "e", "e", "w", "e", "w", "e", "w",
+							"e", "e", "w", "e", "e", "w", "w" },
+					{ "w", "e", "e", "e", "w", "e", "w", "e", "e", "w", "e", "e", "w",
+							"e", "e", "w", "e", "e", "e", "w" },
+					{ "w", "e", "e", "e", "e", "e", "w", "e", "e", "w", "e", "e", "w",
+							"e", "e", "w", "e", "e", "e", "w" },
+					{ "w", "e", "w", "w", "e", "w", "w", "e", "e", "e", "e", "e", "e",
+							"e", "e", "w", "e", "e", "w", "w" },
+					{ "w", "e", "e", "w", "e", "w", "e", "e", "e", "e", "w", "e", "e",
+							"e", "e", "w", "e", "e", "w", "w" },
+					{ "w", "e", "e", "e", "e", "e", "e", "e", "e", "w", "w", "e", "w",
+							"e", "e", "w", "e", "e", "w", "w" },
+					{ "w", "e", "e", "e", "e", "e", "e", "e", "e", "e", "w", "e", "w",
+							"e", "e", "w", "e", "e", "w", "w" },
+					{ "w", "e", "e", "e", "e", "e", "e", "e", "e", "w", "e", "e", "e",
+							"e", "e", "w", "e", "e", "w", "w" },
+					{ "w", "e", "e", "w", "e", "e", "e", "e", "e", "e", "e", "e", "e",
+							"e", "e", "e", "e", "e", "w", "w" },
+					{ "w", "e", "e", "w", "e", "w", "w", "w", "e", "e", "w", "e", "w",
+							"e", "e", "w", "w", "e", "w", "w" },
+					{ "w", "e", "w", "e", "e", "e", "e", "e", "e", "w", "w", "e", "w",
+							"e", "e", "e", "e", "e", "w", "w" },
+					{ "w", "e", "e", "e", "w", "e", "e", "e", "w", "w", "e", "e", "w",
+							"e", "e", "e", "e", "e", "e", "w" },
+					{ "w", "w", "w", "w", "w", "w", "w", "w", "w", "w", "w", "w",
+							"w", "w", "w", "w", "w", "w", "w", "w" }, };
 		 
 		players = new ArrayList<Player>();
 		me = new Player(in);
@@ -26,7 +68,7 @@ public class game {
 		
 		ScoreList s = new ScoreList(players);
 		s.setVisible(true);
-		gameplayer g = new gameplayer(me,s);
+		gameplayer g = new gameplayer(me,s, level);
 	}
 
 }

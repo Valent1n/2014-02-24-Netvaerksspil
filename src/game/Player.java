@@ -1,6 +1,12 @@
 package game;
 
+//TODO
+// Få player ind i et observer pattern
+// Player implementerer subject
+// Map implementerer observer
+
 public class Player {
+	int id;
 	String name;
 	int xpos;
 	int ypos;
@@ -8,6 +14,14 @@ public class Player {
 	String direction;
 
 	public Player(String name) {
+		this.name = name;
+		xpos = 9;
+		ypos = 7;
+		point = 0;
+		direction = "up";
+	}
+
+	public Player(String name, int id) {
 		this.name = name;
 		xpos = 9;
 		ypos = 7;
@@ -51,4 +65,14 @@ public class Player {
 	void subOnePoint() {
 		point--;
 	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+	
+	
 }
