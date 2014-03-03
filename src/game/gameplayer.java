@@ -26,7 +26,7 @@ public class gameplayer {
 		this.slist = s;
 		screen = new Screen(level,me.getXpos(),me.getYpos());
 		screen.setVisible(true);
-		ko = new KeyClass(this);
+		ko = new KeyClass(this, me);
 		screen.addKeyListener(ko); 
 	}
 
