@@ -4,10 +4,10 @@ import java.awt.event.KeyListener;
 
 
 public class KeyClass implements KeyListener {
-	private gameplayer g;
+	private GamePlayer g;
 	private Player me;
 	
-	public KeyClass(gameplayer g, Player me){
+	public KeyClass(GamePlayer g, Player me){
 		this.g = g;
 		this.me = me;
 	}
