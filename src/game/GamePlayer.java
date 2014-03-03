@@ -1,7 +1,7 @@
 package game;
 import java.util.HashSet;
 import java.util.Set;
-public class gameplayer {
+public class GamePlayer {
 	
 	// Players start values
 	//private String playerDirection = "up";
@@ -19,7 +19,7 @@ public class gameplayer {
 	// level is defined column by column
 	Screen screen; 
 
-	public gameplayer(Player me, ScoreList s, String[][] level) {
+	public GamePlayer(Player me, ScoreList s, String[][] level) {
 		this.level = level;
 		players = new HashSet<Player>();
 		this.me = me;
