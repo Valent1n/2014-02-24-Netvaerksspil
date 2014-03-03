@@ -68,7 +68,7 @@ public class Game {
 		
 		ScoreList s = new ScoreList(players);
 		s.setVisible(true);
-		GamePlayer g = new GamePlayer(me,s);
+		GamePlayer g = new GamePlayer(me,s, level);
 	}
 
 }

@@ -6,54 +6,73 @@ package game;
 // Map implementerer observer
 
 public class Player {
-int id;
-String name;
-int xpos;
-int ypos;
-int point;
-String direction;
+	int id;
+	String name;
+	int xpos;
+	int ypos;
+	int point;
+	String direction;
 
-public Player (String name, int id) {
-	this.name = name;
-	xpos = 9;
-	ypos = 7;
-	point = 0;
-	direction = "up";
-}
+	public Player(String name) {
+		this.name = name;
+		xpos = 9;
+		ypos = 7;
+		point = 0;
+		direction = "up";
+	}
 
-public int getXpos() {
-	return xpos;
-}
+	public Player(String name, int id) {
+		this.name = name;
+		xpos = 9;
+		ypos = 7;
+		point = 0;
+		direction = "up";
+	}
 
-public void setXpos(int xpos) {
-	this.xpos = xpos;
-}
+	public int getXpos() {
+		return xpos;
+	}
 
-public int getYpos() {
-	return ypos;
-}
+	public void setXpos(int xpos) {
+		this.xpos = xpos;
+	}
 
-public void setYpos(int ypos) {
-	this.ypos = ypos;
-}
-public String getDirection() {
-	return direction;
-}
+	public int getYpos() {
+		return ypos;
+	}
 
-public void setDirection(String direction) {
-	this.direction = direction;
-}
+	public void setYpos(int ypos) {
+		this.ypos = ypos;
+	}
 
-String ToString () {
-	return name + "   " + point;
-}
-void addOnePoint() {
+	public String getDirection() {
+		return direction;
+	}
+
+	public void setDirection(String direction) {
+		this.direction = direction;
+	}
+
+	String ToString() {
+		return name + "   " + point;
+	}
+
+	void addOnePoint() {
+
+		point++;
+	}
+
+	void subOnePoint() {
+		point--;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
 	
-	point ++;
+	
 }
-
-void subOnePoint() {
-	point --;
-}
-}
-

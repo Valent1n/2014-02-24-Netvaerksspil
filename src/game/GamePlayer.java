@@ -11,7 +11,6 @@ public class GamePlayer {
 	private String wall = "w";
 	private KeyClass ko;
 	private Set<Player> players;
-	
 	ScoreList slist;
 
 	
@@ -27,7 +26,7 @@ public class GamePlayer {
 		this.slist = s;
 		screen = new Screen(level,me.getXpos(),me.getYpos());
 		screen.setVisible(true);
-		ko = new KeyClass(this);
+		ko = new KeyClass(this, me);
 		screen.addKeyListener(ko); 
 	}
 
@@ -35,6 +34,7 @@ public class GamePlayer {
 
 
 	public void PlayerMoved(String direction, Player player) {
+		//TODO Spilleren med id fra parameter bevæges
 		player.direction = direction;
 		int x = player.getXpos(),y = player.getYpos();
 		if (direction.equals("right")) {
