@@ -1,0 +1,55 @@
+(extended Backus-Naur form/EBNF)
+Version 1.0
+
+protocolName = "Schwarzenegger" ;
+
+unsignedInt = { digit } ;
+
+signedInt = [ "-" ] , { digit } ;
+
+protocolVersion = unsignedInt , { "." unsignedInt } ;
+
+mapField = "w" | "e" ;
+(w = wall, e = earth)
+
+dimX = unsignedInt ;
+
+dimY = unsignedInt ;
+
+posX = unsignedInt ;
+
+posY = unsignedInt ;
+
+mapRow = { mapField } ;
+
+map = "\nMap " , dimX , " " , dimY , { "\n" , mapRow } ;
+
+userName = { letter | digit } ;
+
+userId = unsignedInt ;
+
+playerScore = signedInt ;
+
+move = "moveup" | "movedown" | "moveleft" | "moveright" ;
+
+action = move | "shoot" ;
+
+direction = "0" | "1" | "2" | "3" ;
+
+playerState = userId , " " , posX , " " , posY , " " , playerScore , " " , userName , " " , direction ;
+
+greeeting = protocolName , " " , protocolVersion , "\n" ;
+
+loginRequestPacket = greeeting , "Login " , userName ;
+
+loginGrantedPacket = greeeting , "Granted " , userId , map ;
+
+loginDeniedPacket = greeeting , "Denied" ;
+
+actionPacket = greeeting , { action , "\n" } ;
+
+statePacket = greeeting , { playerState , "\n" } ;
+
+logoffPacket = greeting , "Logoff " , userName ;
+
+

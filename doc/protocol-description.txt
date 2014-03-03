@@ -1,0 +1,33 @@
+Schwarzenegger-protokollen er en protokol til at applikationslags-protokol designet til at håndtere kommunikation mellem spillere i spillet Arnold. Protokollen er en client/server protokol, der bruger UDP som transportlag.
+
+--protokol-flow:
+
+1) Handshake
+1.1) Når en spiller logger på sender hans klient en LogonRequestPacket (se /doc/protocol-message-definition.txt) til en server. Pakken indeholder et ønsket brugernavn.
+
+1.2) Hvis brugernavnet er ledigt og protokol-versionen matcher udføres punkt 1.2.a. Ellers udføres punkt 1.2.b.
+
+1.2.a) Brugeren tildeles et ID-nummer af serveren, og serveren sender en loginGrantedPacket til klienten. Pakken indeholder det nye brugernavn samt det aktuelle map-layout. Der springes til punkt 2.
+
+1.2.b) Serveren sender en loginDeniedPacket til klienten. Forbindelsen betragtes nu som afsluttet.
+
+2) Normal
+Her er to muligheder: klienten kan sende en actionPacket til serveren, eller serveren kan sende en statePacket til klienten.
+
+2.a) actionPacket
+klienten sender en actionPacket, der beskriver hvilke handlinger brugeren har foretaget siden sidste actionPacket. 
+Klienten bør holde en pause på minimum 50 ms mellem hver pakke for at holde netværksbelastningen nede. Hvis brugeren foretager sig flere handlinger i dette tidsrum sendes disse handlinger i dan samme actionPacket med handlingerne listet kronologisk, med den ældste handling først.
+Klienten bør sende en actionPacket minimum hvert 5. sekund. I tilfælde af at brugeren ikke har foretaget sig noget siden sidst sendes blot en actionPacket uden actions.
+Hvis serveren ikke har modtaget en actionPacket i 20 sekunder skal klienten betragtes som logget ud.
+
+2.b) statePacket
+Serveren sender en statePacket til klienten, der beskriver alle spilleres nuværende position, score, brugernavn og retning.
+Hvis en spiller ikke er nævnt i pakken betragtes han som logget ud.
+Serveren bør holde en pause på miminum 50 ms mellem hver statePacket for at holde netværksbelastningen nede.
+Serveren bør sende en statePacket minimum hvert 5. sekund. 
+Hvis klienten ikke har modtaget en statePacket i 20 sekunder skal serveren betragtes som død.
+
+
+3) logoffPacket
+En klient bør logge af når den lukker ned. Dette foregår ved at sende en logoffPacket. Beskeden indeholder brugernavn. Når serveren modtager en logoffPacket er brugeren ikke længere med i spillet, og klienten modtager ikke flere statePacket's. efterfølgende actionPacket's ignoreres af serveren. Klienten modtager ikke noget svar på en logoffPacket.
+
