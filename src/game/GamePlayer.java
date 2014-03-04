@@ -100,19 +100,19 @@ public class GamePlayer {
 		// TODO Spilleren med id fra parameter bevæges
 		player.setDirection(direction);;
 		int x = player.getXpos(), y = player.getYpos();
-		if (direction.equals("right")) {
+		if (direction.equals(Direction.RIGHT)) {
 			x = player.getXpos() + 1;
 		}
 		;
-		if (direction.equals("left")) {
+		if (direction.equals(Direction.LEFT)) {
 			x = player.getXpos() - 1;
 		}
 		;
-		if (direction.equals("up")) {
+		if (direction.equals(Direction.UP)) {
 			y = player.getYpos() - 1;
 		}
 		;
-		if (direction.equals("down")) {
+		if (direction.equals(Direction.DOWN)) {
 			y = player.getYpos() + 1;
 		}
 		;
