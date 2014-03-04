@@ -34,7 +34,7 @@ public class ScoreList extends JFrame {
 	}
 	public void draw() {
 		for (int j = 0; j < players.size(); j++) {
-				JLabel l = new JLabel(players.get(j).ToString());
+				JLabel l = new JLabel(players.get(j).toString());
 				l.setSize(50,200);
 				this.add(l);
 				labels.add(l);
@@ -42,7 +42,7 @@ public class ScoreList extends JFrame {
 	}	
 	public void updateScoreOnScreen(Player p) {
 		int playerno = players.indexOf(p);
-		labels.get((playerno)).setText(players.get(playerno).ToString());
+		labels.get((playerno)).setText(players.get(playerno).toString());
 	}			
 	
 	

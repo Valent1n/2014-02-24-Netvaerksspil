@@ -96,9 +96,9 @@ public class GamePlayer {
 		network.sendShoot();
 	}
 
-	public void PlayerMoved(String direction, Player player) {
+	public void PlayerMoved(Direction direction, Player player) {
 		// TODO Spilleren med id fra parameter bevæges
-		player.direction = direction;
+		player.setDirection(direction);;
 		int x = player.getXpos(), y = player.getYpos();
 		if (direction.equals("right")) {
 			x = player.getXpos() + 1;
@@ -139,7 +139,7 @@ public class GamePlayer {
 
 	public Player isIdValid(int id) {
 		for (Player p : this.getPlayers()) {
-			if (p.id == id) {
+			if (p.getId() == id) {
 				return p;
 			}
 		}

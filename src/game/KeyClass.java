@@ -14,18 +14,18 @@ public class KeyClass implements KeyListener {
 
 		public void keyPressed(KeyEvent ke) {
 			if (ke.getKeyCode() == ke.VK_UP) {
-				g.PlayerMoved("up", me);
+				g.PlayerMoved(Direction.UP, me);
 				//TODO 
 			}
 
 			if (ke.getKeyCode() == ke.VK_DOWN) {
-				g.PlayerMoved("down", me);
+				g.PlayerMoved(Direction.DOWN, me);
 			}
 			if (ke.getKeyCode() == ke.VK_LEFT) {
-				g.PlayerMoved("left", me);
+				g.PlayerMoved(Direction.LEFT, me);
 			}
 			if (ke.getKeyCode() == ke.VK_RIGHT) {
-				g.PlayerMoved("right", me);
+				g.PlayerMoved(Direction.RIGHT, me);
 			}
 	}
 

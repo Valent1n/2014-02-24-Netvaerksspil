@@ -62,9 +62,9 @@ public class Game {
 							"w", "w", "w", "w", "w", "w", "w", "w" }, };
 		 
 		players = new ArrayList<Player>();
-		me = new Player(in);
+		me = new Player(in, -1);
 		players.add(me);
-		players.add(new Player("FUP"));
+		players.add(new Player("FUP", -2));
 		
 		ScoreList s = new ScoreList(players);
 		s.setVisible(true);

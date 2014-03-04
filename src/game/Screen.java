@@ -31,24 +31,24 @@ public class Screen  extends JFrame {
 		this.repaint();
 		this.setVisible(true);
 	}
-	public void movePlayerOnScreen(int oldX, int oldY, int x, int y,String playerDirection) {
+	public void movePlayerOnScreen(int oldX, int oldY, int x, int y,Direction playerDirection) {
 	
 		labels[oldX][oldY].setIcon(new ImageIcon("./Image/Gulv2.png"));
 
 
-		if (playerDirection.equals("right")) {
+		if (playerDirection.equals(Direction.RIGHT)) {
 			labels[x][y].setIcon(
 					new ImageIcon("./Image/Helthoejre.png"));
 		};
-		if (playerDirection.equals("left")) {
+		if (playerDirection.equals(Direction.LEFT)) {
 			labels[x][y].setIcon(
 					new ImageIcon("./Image/Heltvenstre.png"));
 		};
-		if (playerDirection.equals("up")) {
+		if (playerDirection.equals(Direction.UP)) {
 			labels[x][y].setIcon(
 					new ImageIcon("./Image/HeltOp.png"));
 		};
-		if (playerDirection.equals("down")) {
+		if (playerDirection.equals(Direction.DOWN)) {
 			labels[x][y].setIcon(
 					new ImageIcon("./Image/HeltNed.png"));
 		};
