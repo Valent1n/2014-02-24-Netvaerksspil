@@ -1,5 +1,9 @@
-package game;
+package server;
 
+import game.Direction;
+import game.Player;
+
+import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -11,21 +15,25 @@ import java.util.regex.Pattern;
 
 public class NetworkServer {
 	
-	static final Charset charset = StandardCharsets.UTF_8;
-	static final String protocolName =  "Schwartzeneger";
-	static final String protocolVersion = "1.0";
+	public static final Charset charset = StandardCharsets.UTF_8;
+	public static final String protocolName =  "Schwartzenegger";
+	public static final String protocolVersion = "1.0";
+	public static final long minStateDelayMs = 50;
+	public static final long maxStateDelayMs = 20000;
 	private static final Pattern actionsRegex = Pattern.compile(protocolName + " " +
 			"(\\d+(?:\\.\\d+)*) ((?:\\nMove(?:up|down|left|right))*)");
 	private static final Pattern actionRegex = Pattern.compile("^move(up|down|left|right)$");
 	private static final Pattern loginRegex = Pattern.compile(protocolName + " " +
 			"(\\d+(?:\\.\\d+)*)\nLogin (.+)");
+	
 
 	
 	DatagramSocket sock;
 	GameServer gameServer;
 	byte[] receiveBuffer;
 	byte[] loginSendBuffer;
-	
+	byte[] sendStateBuffer;
+	volatile boolean shutdownInitiated = false;
 	
 	
 	private void parsePacket(DatagramPacket packet) {
@@ -36,7 +44,7 @@ public class NetworkServer {
 		
 		Matcher actionMatch = actionsRegex.matcher(data); 
 		if (actionMatch.matches()) {
-			Player player = gameServer.getPlayer(address, port);
+			ServerPlayer player = gameServer.getPlayer(address, port);
 			handleActionPacket(actionMatch.group(2), player);
 			return;
 		}
@@ -51,11 +59,11 @@ public class NetworkServer {
 	
 	private void handleLogin(String playerName, String protocolVersion, InetAddress address, int port) {
 		
-		if (!this.protocolVersion.equals(protocolVersion)) {
+		if (!NetworkServer.protocolVersion.equals(protocolVersion)) {
 			//TODO fail: protocol mismatch
 		}
 		
-		Player player = gameServer.createPlayer(playerName, address, port);
+		ServerPlayer player = gameServer.createPlayer(playerName, address, port);
 		
 		if (player == null) {
 			//TODO fail: denied
@@ -65,21 +73,49 @@ public class NetworkServer {
 		
 	}
 	
-	private void handleActionPacket(String actions, Player player) {
+	private void handleActionPacket(String actions, ServerPlayer player) {
 		for (String action : actions.split("\n")) {
 			Matcher match = actionRegex.matcher(action);
 			String directionString = match.group(1);
 			Direction direction = Direction.fromString(directionString);
-			movePlayer(player, direction);
+			gameServer.movePlayer(player, direction);
 		}
 	}
 	
-	private void movePlayer(Player player, Direction direction) {
+	private void sendRawMessage(byte[] msg, int length, InetAddress address, int port) {
+		DatagramPacket pack = new DatagramPacket(msg, length, address, port);
+		try {
+			sock.send(pack);
+		} catch (IOException e) {
+			e.printStackTrace();
+			
+		}
+	}
+	
+	private void sendStatePackets() {
 		//TODO 
 	}
 	
-	private void sendRawMessage(byte[] msg, InetAddress address, int port) {
-		//TODO 
+	
+	private class SendStateThread implements Runnable {
+
+		private long lastStateSent = 0;
+		
+		@Override
+		public void run() {
+			while (!shutdownInitiated) {
+				long currentTime = System.currentTimeMillis();
+				if (lastStateSent + minStateDelayMs < currentTime) {
+					lastStateSent = currentTime;
+					sendStatePackets();
+				}
+				try {
+					synchronized (this) {
+						wait(maxStateDelayMs);
+					}
+				} catch (InterruptedException e) {/*nothing*/}
+			}
+		}
 		
 	}
 }
