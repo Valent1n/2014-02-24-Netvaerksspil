@@ -2,40 +2,67 @@ package server;
 
 import game.Direction;
 import game.Player;
+import game.PlayerObserver;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
-public class NetworkServer {
+public class NetworkServer implements PlayerObserver {
 	
 	public static final Charset charset = StandardCharsets.UTF_8;
 	public static final String protocolName =  "Schwartzenegger";
 	public static final String protocolVersion = "1.0";
 	public static final long minStateDelayMs = 50;
 	public static final long maxStateDelayMs = 20000;
-	private static final Pattern actionsRegex = Pattern.compile(protocolName + " " +
-			"(\\d+(?:\\.\\d+)*) ((?:\\nMove(?:up|down|left|right))*)");
-	private static final Pattern actionRegex = Pattern.compile("^move(up|down|left|right)$");
-	private static final Pattern loginRegex = Pattern.compile(protocolName + " " +
-			"(\\d+(?:\\.\\d+)*)\nLogin (.+)");
 	
+	private static final String versionRegex = " (\\d+(?:\\.\\d+)*)\n"; 
+	private static final String greetingRegex = protocolName + versionRegex; 
+	private static final Pattern actionsPatt = Pattern.compile(greetingRegex + 
+				"((?:\\nMove(?:up|down|left|right))*)");
+	private static final Pattern movePatt = Pattern.compile("^move(up|down|left|right)$");
+	private static final Pattern shootPatt = Pattern.compile("shoot");
+	private static final Pattern loginPatt = Pattern.compile(greetingRegex + "\nLogin ([\\w+)");
+	private static final Pattern logoffPatt = Pattern.compile(greetingRegex + "Logoff");
 
+	private static final byte[] loginDenied = (protocolName + " " + protocolVersion + 
+			"\nDenied").getBytes(charset);
 	
-	DatagramSocket sock;
-	GameServer gameServer;
-	byte[] receiveBuffer;
-	byte[] loginSendBuffer;
-	byte[] sendStateBuffer;
-	volatile boolean shutdownInitiated = false;
+	private DatagramSocket sock;
+	private GameServer gameServer;
+	private byte[] receiveBuffer = new byte[1<<16]; //65536, same as 2^16
+	private volatile boolean shutdownInitiated = false;
+	private Thread receiveThread;
+	private Thread sendStateThread;
 	
+	
+	public NetworkServer(GameServer gameServer, int udpPort) throws SocketException {
+		sock = new DatagramSocket(udpPort);
+		this.gameServer = gameServer;
+		sendStateThread = new Thread(new SendStateThread());
+		receiveThread = new Thread(new ReceiveThread());
+		sendStateThread.start();
+		receiveThread.start();
+		
+		while (receiveThread.isAlive() || sendStateThread.isAlive()) {
+			try {
+				receiveThread.join(0);
+				sendStateThread.join(0);
+			} catch (InterruptedException e) {
+				// do nothing, just loop again
+			}
+		}
+	}
+
 	private DatagramPacket receivePacket() throws IOException, SocketTimeoutException {
 		DatagramPacket out = new DatagramPacket(receiveBuffer, receiveBuffer.length);
 		sock.receive(out);
@@ -48,43 +75,79 @@ public class NetworkServer {
 		InetAddress address = packet.getAddress();
 		int port = packet.getPort();
 		
-		Matcher actionMatch = actionsRegex.matcher(data); 
+		Matcher actionMatch = actionsPatt.matcher(data); 
 		if (actionMatch.matches()) {
 			ServerPlayer player = gameServer.getPlayer(address, port);
 			handleActionPacket(actionMatch.group(2), player);
 			return;
 		}
 		
-		Matcher loginMatch = loginRegex.matcher(data);
+		Matcher loginMatch = loginPatt.matcher(data);
 		if (loginMatch.matches()) {
 			String playerName = loginMatch.group(2);
 			String protocolVersion = loginMatch.group(1);
 			handleLogin(playerName, protocolVersion, address, port);
+			return;
+		}
+		
+		Matcher logoffMatch = logoffPatt.matcher(data);
+		if (logoffMatch.matches()) {
+			handleLogoff(address, port);
+			return;
 		}
 	}
 	
 	private void handleLogin(String playerName, String protocolVersion, InetAddress address, int port) {
 		
 		if (!NetworkServer.protocolVersion.equals(protocolVersion)) {
-			//TODO fail: protocol mismatch
+			sendRawMessage(loginDenied, loginDenied.length, address, port);
 		}
 		
 		ServerPlayer player = gameServer.createPlayer(playerName, address, port);
 		
 		if (player == null) {
-			//TODO fail: denied
+			sendRawMessage(loginDenied, loginDenied.length, address, port);
 		} else {
-			//TODO success
+			//success
+			byte[] bytes = createLoginGrantedMessage(player);
+			//TODO player.addListener(this)
+			sendRawMessage(bytes, bytes.length, address, port);
 		}
 		
 	}
 	
+	private byte[] createLoginGrantedMessage(ServerPlayer player) {
+		StringBuilder sb = new StringBuilder();
+		sb.append(NetworkServer.protocolName + " " + 
+					NetworkServer.protocolVersion + "\nGranted ");
+		sb.append(player.getId());
+		sb.append("\n");
+		String[] mapLayout = gameServer.getMapLayout();
+		sb.append("Map ");
+		sb.append(mapLayout[0].length());
+		sb.append(" ");
+		sb.append(mapLayout.length);
+		for (String row : mapLayout) {
+			sb.append("\n");
+			sb.append(row);
+		}
+		byte[] bytes = sb.toString().getBytes(charset);
+		return bytes;
+	}
+	
 	private void handleActionPacket(String actions, ServerPlayer player) {
 		for (String action : actions.split("\n")) {
-			Matcher match = actionRegex.matcher(action);
-			String directionString = match.group(1);
-			Direction direction = Direction.fromString(directionString);
-			gameServer.movePlayer(player, direction);
+			Matcher moveMatch = movePatt.matcher(action);
+			if (moveMatch.matches()) {
+				String directionString = moveMatch.group(1);
+				Direction direction = Direction.fromString(directionString);
+				gameServer.movePlayer(player, direction);
+				continue;
+			}
+			Matcher shootMatch = shootPatt.matcher(action);
+			if (shootMatch.matches()) {
+				gameServer.shoot(player);
+			}
 		}
 	}
 	
@@ -98,29 +161,64 @@ public class NetworkServer {
 		}
 	}
 	
-	private void sendStatePackets() {
-		//TODO 
+	private void handleLogoff(InetAddress address, int port) {
+		gameServer.removePlayer(address, port);
 	}
 	
-	private void initiateShutdown() {
-		//TODO 
+	private void sendStatePackets() {
+		StringBuilder sb = new StringBuilder();
+		Set<ServerPlayer> players = gameServer.getPlayers();
+		sb.append(protocolName + " " + protocolVersion);
+		
+		String pattern = "\n%i %i %i %i %s %i";
+		for (ServerPlayer p : players) {
+			String line = String.format(pattern, p.getId(), p.getXpos(), p.getYpos(), 
+					p.getPoint(), p.getName(), p.getDirection().ordinal());
+			sb.append(line);
+		}
+		byte[] bytes = sb.toString().getBytes(charset);
+		
+		for (ServerPlayer p : players) {
+			sendRawMessage(bytes, bytes.length, p.getIp(), p.getPort());
+		}
+		
+		
+	}
+	@Override
+	public void update(Player player) {
+		sendStateThread.interrupt();
+		
+	}
+	
+	public void initiateShutdown() {
+		if (!shutdownInitiated) {
+			shutdownInitiated = true;
+			sendStateThread.interrupt();
+			receiveThread.interrupt();
+		}
 	}
 	
 	private class SendStateThread implements Runnable {
 
-		private long lastStateSent = 0;
 		
 		@Override
 		public void run() {
+			long lastStateSent = 0;
+			long waitPeriod;
+			
 			while (!shutdownInitiated) {
 				long currentTime = System.currentTimeMillis();
-				if (lastStateSent + minStateDelayMs < currentTime) {
+				if (lastStateSent + minStateDelayMs <= currentTime) {
 					lastStateSent = currentTime;
 					sendStatePackets();
+					waitPeriod = maxStateDelayMs;
+				} else {
+					waitPeriod = currentTime - lastStateSent + minStateDelayMs;
 				}
+				
 				try {
 					synchronized (this) {
-						wait(maxStateDelayMs);
+						wait(waitPeriod);
 					}
 				} catch (InterruptedException e) {
 					/*nothing*/
@@ -148,4 +246,5 @@ public class NetworkServer {
 		}
 		
 	}
+
 }
