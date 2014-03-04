@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.SocketTimeoutException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.regex.Matcher;
@@ -35,8 +36,13 @@ public class NetworkServer {
 	byte[] sendStateBuffer;
 	volatile boolean shutdownInitiated = false;
 	
+	private DatagramPacket receivePacket() throws IOException, SocketTimeoutException {
+		DatagramPacket out = new DatagramPacket(receiveBuffer, receiveBuffer.length);
+		sock.receive(out);
+		return null;
+	}
 	
-	private void parsePacket(DatagramPacket packet) {
+	private void handlePacket(DatagramPacket packet) {
 		byte[] bytes = packet.getData();
 		String data = new String(bytes, 0,  bytes.length, charset);
 		InetAddress address = packet.getAddress();
@@ -96,6 +102,9 @@ public class NetworkServer {
 		//TODO 
 	}
 	
+	private void initiateShutdown() {
+		//TODO 
+	}
 	
 	private class SendStateThread implements Runnable {
 
@@ -113,7 +122,28 @@ public class NetworkServer {
 					synchronized (this) {
 						wait(maxStateDelayMs);
 					}
-				} catch (InterruptedException e) {/*nothing*/}
+				} catch (InterruptedException e) {
+					/*nothing*/
+				}
+			}
+		}
+		
+	}
+	
+	private class ReceiveThread implements Runnable {
+
+		@Override
+		public void run() {
+			while (!shutdownInitiated) {
+				try {
+					DatagramPacket packet = receivePacket();
+					handlePacket(packet);
+				} catch (SocketTimeoutException e) {
+					/*Nothing, just keep looping*/
+				} catch (Exception e) {
+					e.printStackTrace();
+					initiateShutdown();
+				}
 			}
 		}
 		
