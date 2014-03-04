@@ -229,14 +229,14 @@ public class Network extends Thread {
 				p.setXpos(Integer.parseInt(playerUpdate[1]));
 				p.setYpos(Integer.parseInt(playerUpdate[2]));
 				p.setPoint(Integer.parseInt(playerUpdate[3]));
-				p.setDirection(playerUpdate[5]);
+				p.setDirection(Direction.fromString(playerUpdate[5]));
 			} else{
 				// Opret ny spiller
 				p = new Player(playerUpdate[4], Integer.parseInt(playerUpdate[0]));
 				p.setXpos(Integer.parseInt(playerUpdate[1]));
 				p.setYpos(Integer.parseInt(playerUpdate[2]));
 				p.setPoint(Integer.parseInt(playerUpdate[3]));
-				p.setDirection(playerUpdate[5]);
+				p.setDirection(Direction.fromString(playerUpdate[5]));
 				gamePlayer.addPlayer(p);
 			}
 			i++;

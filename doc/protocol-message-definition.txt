@@ -34,7 +34,7 @@ move = "moveup" | "movedown" | "moveleft" | "moveright" ;
 
 action = move | "shoot" ;
 
-direction = "0" | "1" | "2" | "3" ;
+direction = "0" | "1" | "2" | "3" ;   (0=up, 1=down, 2=left, 3=right)
 
 playerState = userId , " " , posX , " " , posY , " " , playerScore , " " , userName , " " , direction ;
 
