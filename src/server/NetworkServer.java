@@ -4,6 +4,7 @@ import game.Direction;
 import game.Player;
 import game.PlayerObserver;
 
+import java.io.Closeable;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -17,13 +18,15 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
-public class NetworkServer implements PlayerObserver {
+public class NetworkServer implements PlayerObserver, Closeable {
 	
 	public static final Charset charset = StandardCharsets.UTF_8;
 	public static final String protocolName =  "Schwartzenegger";
 	public static final String protocolVersion = "1.0";
 	public static final long minStateDelayMs = 50;
 	public static final long maxStateDelayMs = 20000;
+
+	private static final int socketTimeout = 2000;
 	
 	private static final String versionRegex = " (\\d+(?:\\.\\d+)*)\n"; 
 	private static final String greetingRegex = protocolName + versionRegex; 
@@ -31,7 +34,7 @@ public class NetworkServer implements PlayerObserver {
 				"((?:\\nMove(?:up|down|left|right))*)");
 	private static final Pattern movePatt = Pattern.compile("^move(up|down|left|right)$");
 	private static final Pattern shootPatt = Pattern.compile("shoot");
-	private static final Pattern loginPatt = Pattern.compile(greetingRegex + "\nLogin ([\\w+)");
+	private static final Pattern loginPatt = Pattern.compile(greetingRegex + "\nLogin ([\\w+])");
 	private static final Pattern logoffPatt = Pattern.compile(greetingRegex + "Logoff");
 
 	private static final byte[] loginDenied = (protocolName + " " + protocolVersion + 
@@ -47,31 +50,24 @@ public class NetworkServer implements PlayerObserver {
 	
 	public NetworkServer(GameServer gameServer, int udpPort) throws SocketException {
 		sock = new DatagramSocket(udpPort);
+		sock.setSoTimeout(socketTimeout);
 		this.gameServer = gameServer;
 		sendStateThread = new Thread(new SendStateThread());
 		receiveThread = new Thread(new ReceiveThread());
 		sendStateThread.start();
 		receiveThread.start();
 		
-		while (receiveThread.isAlive() || sendStateThread.isAlive()) {
-			try {
-				receiveThread.join(0);
-				sendStateThread.join(0);
-			} catch (InterruptedException e) {
-				// do nothing, just loop again
-			}
-		}
 	}
 
 	private DatagramPacket receivePacket() throws IOException, SocketTimeoutException {
 		DatagramPacket out = new DatagramPacket(receiveBuffer, receiveBuffer.length);
 		sock.receive(out);
-		return null;
+		return out;
 	}
 	
 	private void handlePacket(DatagramPacket packet) {
 		byte[] bytes = packet.getData();
-		String data = new String(bytes, 0,  bytes.length, charset);
+		String data = new String(bytes, 0,  packet.getLength(), charset);
 		InetAddress address = packet.getAddress();
 		int port = packet.getPort();
 		
@@ -110,7 +106,7 @@ public class NetworkServer implements PlayerObserver {
 		} else {
 			//success
 			byte[] bytes = createLoginGrantedMessage(player);
-			//TODO player.addListener(this)
+			player.addObserver(this);
 			sendRawMessage(bytes, bytes.length, address, port);
 		}
 		
@@ -136,6 +132,7 @@ public class NetworkServer implements PlayerObserver {
 	}
 	
 	private void handleActionPacket(String actions, ServerPlayer player) {
+		player.registerLifeSign();
 		for (String action : actions.split("\n")) {
 			Matcher moveMatch = movePatt.matcher(action);
 			if (moveMatch.matches()) {
@@ -190,7 +187,7 @@ public class NetworkServer implements PlayerObserver {
 		
 	}
 	
-	public void initiateShutdown() {
+	private void initiateShutdown() {
 		if (!shutdownInitiated) {
 			shutdownInitiated = true;
 			sendStateThread.interrupt();
@@ -198,8 +195,29 @@ public class NetworkServer implements PlayerObserver {
 		}
 	}
 	
+	public boolean isShutdownInitiated() {
+		return shutdownInitiated;
+	}
+	
+	public boolean isAlive() {
+		return receiveThread.isAlive() || sendStateThread.isAlive();
+	}
+	
+	@Override
+	public void close() throws IOException {
+		initiateShutdown();
+		while (receiveThread.isAlive() || sendStateThread.isAlive()) {
+			try {
+				receiveThread.join(0);
+				sendStateThread.join(0);
+			} catch (InterruptedException e) {
+				//nothing, just loop
+			}
+		}
+	}
+	
+	
 	private class SendStateThread implements Runnable {
-
 		
 		@Override
 		public void run() {
@@ -246,5 +264,6 @@ public class NetworkServer implements PlayerObserver {
 		}
 		
 	}
+
 
 }
