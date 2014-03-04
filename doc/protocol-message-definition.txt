@@ -42,7 +42,7 @@ greeeting = protocolName , " " , protocolVersion , "\n" ;
 
 loginRequestPacket = greeeting , "Login " , userName ;
 
-loginGrantedPacket = greeeting , "Granted " , userId , map ;
+loginGrantedPacket = greeeting , "Granted " , userId , "\n" , map ;
 
 loginDeniedPacket = greeeting , "Denied" ;
 
