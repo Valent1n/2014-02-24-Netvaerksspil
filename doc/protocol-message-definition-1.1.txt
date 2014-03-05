@@ -1,0 +1,72 @@
+#(extended Backus-Naur form/EBNF)
+#Version 1.1
+
+protocolName = "Schwarzenegger" ;
+
+digit = "0".."9" ;
+
+upperCaseLetter = "A".."Z" ;
+
+lowerCaseLetter = "a".."z" ;
+
+letter = upperCaseLetter | lowerCaseLetter ;
+
+unsignedInt = { digit } ;
+
+signedInt = [ "-" ] unsignedInt ;
+
+protocolVersion = unsignedInt { "." unsignedInt } ;
+
+clientTimestamp = unsignedInt ;
+
+serverTimestamp = unsignedInt ;
+
+mapField = "w" | "e" ;
+#(w = wall, e = earth)
+
+dimX = unsignedInt ;
+
+dimY = unsignedInt ;
+
+posX = unsignedInt ;
+
+posY = unsignedInt ;
+
+mapRow = { mapField } ;
+
+map = "Map " dimX " " dimY { "\n" mapRow } ;
+
+userName = { letter | digit } ;
+
+userId = unsignedInt ;
+
+playerScore = signedInt ;
+
+move = "moveup" | "movedown" | "moveleft" | "moveright" ;
+
+action = move | "shoot" ;
+
+direction = "0" | "1" | "2" | "3" ;
+#(0=up, 1=down, 2=left, 3=right)
+
+playerState = userId " " posX " " posY " " playerScore " " userName " " direction ;
+
+greeting = protocolName " " protocolVersion "\n" ;
+
+loginRequestPacket = greeting "Login " userName ;
+
+loginGrantedPacket = greeting "Granted " userId "\n" map ;
+
+loginDeniedPacket = greeting "Denied" ;
+
+actionPacket = greeting "Action " clientTimestamp { "\n" action } ;
+
+statePacket = greeting "State " serverTimestamp { "\n" playerState } ;
+
+logoffPacket = greeting "Logoff " userName ;
+
+clientPacket = loginRequestPacket | actionPacket | logoffPacket ;
+
+serverPacket = loginGrantedPacket | loginDeniedPacket | statePacket ;
+
+packet = clientPacket | serverPacket ;
