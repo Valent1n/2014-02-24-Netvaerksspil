@@ -88,6 +88,7 @@ public class GamePlayer {
 
 	}
 	
+	
 	public void moveMe(Direction direction){
 		network.sendMove(direction);
 	}

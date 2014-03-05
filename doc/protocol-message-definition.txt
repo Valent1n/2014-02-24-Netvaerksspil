@@ -22,7 +22,7 @@ posY = unsignedInt ;
 
 mapRow = { mapField } ;
 
-map = "\nMap " , dimX , " " , dimY , { "\n" , mapRow } ;
+map = "Map " , dimX , " " , dimY , { "\n" , mapRow } ;
 
 userName = { letter | digit } ;
 

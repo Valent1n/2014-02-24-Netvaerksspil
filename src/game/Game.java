@@ -17,7 +17,9 @@ public class Game {
 	
 		System.out.println("Indtast dit spillernavn");
 		BufferedReader b = new BufferedReader (new InputStreamReader(System.in));
-		String in = b.readLine();
+		String username = b.readLine();
+		System.out.println("Indtast Servernavn:");
+		String serverName = b.readLine();
 		
 		 String[][] level = {
 					{ "w", "w", "w", "w", "w", "w", "w", "w", "w", "w", "w", "w",
@@ -62,7 +64,7 @@ public class Game {
 							"w", "w", "w", "w", "w", "w", "w", "w" }, };
 		 
 		players = new ArrayList<Player>();
-		me = new Player(in, -1);
+		me = new Player(username, -1);
 		players.add(me);
 		players.add(new Player("FUP", -2));
 		

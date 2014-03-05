@@ -31,7 +31,6 @@ public class Network extends Thread {
 	private OutputThread ot;
 
 	private Network() {
-		singleton = new Network();
 		try {
 			// 1. Opret en socket
 			socket = new DatagramSocket();
@@ -39,10 +38,11 @@ public class Network extends Thread {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		run();
 	}
 
 	public static Network getNetwork() {
-		if (singleton != null)
+		if (singleton == null)
 			singleton = new Network();
 		return singleton;
 	}
@@ -73,8 +73,8 @@ public class Network extends Thread {
 	public boolean logon(String host, int port, String brugernavn) {
 		String msg = protocolName + " " + protocolVersion + "\n" + "Login"
 				+ " " + brugernavn;
-		System.out.println("Prøver at forbinde til " + socket.getInetAddress()
-				+ " port: " + socket.getPort());
+		System.out.println("Prøver at forbinde til " + host
+				+ " port: " + port);
 		try {
 			sendPacket(host, port, msg);
 			String received = null;

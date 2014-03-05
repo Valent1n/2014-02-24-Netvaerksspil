@@ -21,7 +21,7 @@ import java.util.regex.Pattern;
 public class NetworkServer implements PlayerObserver, Closeable {
 	
 	public static final Charset charset = StandardCharsets.UTF_8;
-	public static final String protocolName =  "Schwartzenegger";
+	public static final String protocolName =  "Schwarzenegger";
 	public static final String protocolVersion = "1.0";
 	public static final long minStateDelayMs = 50;
 	public static final long maxStateDelayMs = 20000;
@@ -34,7 +34,7 @@ public class NetworkServer implements PlayerObserver, Closeable {
 				"((?:\\nMove(?:up|down|left|right))*)");
 	private static final Pattern movePatt = Pattern.compile("^move(up|down|left|right)$");
 	private static final Pattern shootPatt = Pattern.compile("shoot");
-	private static final Pattern loginPatt = Pattern.compile(greetingRegex + "\nLogin ([\\w+])");
+	private static final Pattern loginPatt = Pattern.compile(greetingRegex + "Login ([\\w]+)");
 	private static final Pattern logoffPatt = Pattern.compile(greetingRegex + "Logoff");
 
 	private static final byte[] loginDenied = (protocolName + " " + protocolVersion + 
