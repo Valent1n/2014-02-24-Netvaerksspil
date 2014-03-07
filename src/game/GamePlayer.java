@@ -95,7 +95,9 @@ public class GamePlayer {
 	}
 
 	public void setNetwork(Network network) {
+		System.out.println("LALALA");
 		this.network = network;
+		System.out.println(this.network);
 	}
 
 	public Player getMe() {
