@@ -24,7 +24,7 @@ public class NetworkServer implements PlayerObserver, Closeable {
 	public static final String protocolName =  "Schwarzenegger";
 	public static final String protocolVersion = "1.0";
 	public static final long minStateDelayMs = 50;
-	public static final long maxStateDelayMs = 20000;
+	public static final long maxStateDelayMs = 2000;
 
 	private static final int socketTimeout = 2000;
 	
@@ -66,6 +66,7 @@ public class NetworkServer implements PlayerObserver, Closeable {
 	}
 	
 	private void handlePacket(DatagramPacket packet) {
+		System.out.println("Handling packet");
 		byte[] bytes = packet.getData();
 		String data = new String(bytes, 0,  packet.getLength(), charset);
 		InetAddress address = packet.getAddress();
@@ -73,6 +74,7 @@ public class NetworkServer implements PlayerObserver, Closeable {
 		
 		Matcher actionMatch = actionsPatt.matcher(data); 
 		if (actionMatch.matches()) {
+			System.out.println("Handling actionpacket");
 			ServerPlayer player = gameServer.getPlayer(address, port);
 			handleActionPacket(actionMatch.group(2), player);
 			return;
@@ -80,6 +82,7 @@ public class NetworkServer implements PlayerObserver, Closeable {
 		
 		Matcher loginMatch = loginPatt.matcher(data);
 		if (loginMatch.matches()) {
+			System.out.println("Handling loginpacket");
 			String playerName = loginMatch.group(2);
 			String protocolVersion = loginMatch.group(1);
 			handleLogin(playerName, protocolVersion, address, port);
@@ -88,6 +91,7 @@ public class NetworkServer implements PlayerObserver, Closeable {
 		
 		Matcher logoffMatch = logoffPatt.matcher(data);
 		if (logoffMatch.matches()) {
+			System.out.println("Handling logoffpacket");
 			handleLogoff(address, port);
 			return;
 		}
@@ -132,6 +136,7 @@ public class NetworkServer implements PlayerObserver, Closeable {
 	}
 	
 	private void handleActionPacket(String actions, ServerPlayer player) {
+		System.out.println("Action accepted!" +  actions);
 		player.registerLifeSign();
 		for (String action : actions.split("\n")) {
 			Matcher moveMatch = movePatt.matcher(action);
