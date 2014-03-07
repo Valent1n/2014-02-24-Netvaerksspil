@@ -27,12 +27,10 @@ public class NetworkServer implements PlayerObserver, Closeable {
 	public static final long maxStateDelayMs = 2000;
 
 	private static final int socketTimeout = 2000;
-
 	private static final String versionRegex = " (\\d+(?:\\.\\d+)*)\n";
 	private static final String greetingRegex = protocolName + versionRegex;
 	private static final Pattern actionsPatt = Pattern.compile(greetingRegex
-			+ "((?:move(?:up|down|left|right)\n)*)");
-	// "((?:\\nmove(?:up|down|left|right))*)");
+			+ "((?:move(?:up|down|left|right)\n?)*)");
 	private static final Pattern movePatt = Pattern
 			.compile("^move(up|down|left|right)$");
 	private static final Pattern shootPatt = Pattern.compile("shoot");
@@ -72,24 +70,19 @@ public class NetworkServer implements PlayerObserver, Closeable {
 	}
 
 	private void handlePacket(DatagramPacket packet) {
-		System.out.println("Handling packet");
 		byte[] bytes = packet.getData();
 		String data = new String(bytes, 0, packet.getLength(), charset);
 		InetAddress address = packet.getAddress();
 		int port = packet.getPort();
 
-		System.out.println("Trying to handle actionpacket");
 		Matcher actionMatch = actionsPatt.matcher(data);
 		if (actionMatch.matches()) {
-			System.out.println("Handling actionpacket");
 			ServerPlayer player = gameServer.getPlayer(address, port);
 			handleActionPacket(actionMatch.group(2), player);
 			return;
 		}
-		System.out.println("Actionpackethandling failed.");
 		Matcher loginMatch = loginPatt.matcher(data);
 		if (loginMatch.matches()) {
-			System.out.println("Handling loginpacket");
 			String playerName = loginMatch.group(2);
 			String protocolVersion = loginMatch.group(1);
 			handleLogin(playerName, protocolVersion, address, port);
@@ -98,7 +91,6 @@ public class NetworkServer implements PlayerObserver, Closeable {
 
 		Matcher logoffMatch = logoffPatt.matcher(data);
 		if (logoffMatch.matches()) {
-			System.out.println("Handling logoffpacket");
 			handleLogoff(address, port);
 			return;
 		}
@@ -146,7 +138,6 @@ public class NetworkServer implements PlayerObserver, Closeable {
 	}
 
 	private void handleActionPacket(String actions, ServerPlayer player) {
-		System.out.println("Action accepted!" + actions);
 		player.registerLifeSign();
 		for (String action : actions.split("\n")) {
 			Matcher moveMatch = movePatt.matcher(action);

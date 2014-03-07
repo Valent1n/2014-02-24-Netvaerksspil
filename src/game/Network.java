@@ -25,7 +25,7 @@ public class Network extends Thread {
 	private String name;
 	private InputThread it;
 	private OutputThread ot;
-	private static final int msBetweenPackets = 5000; 
+	private static final int msBetweenPackets = 500; 
 	
 	//  Temp constructor - bruger faste værdier af ip og port
 	public Network(String name, GamePlayer gamePlayer) {
@@ -259,6 +259,7 @@ public class Network extends Thread {
 				p.setYpos(Integer.parseInt(playerUpdate[2]));
 				p.setPoint(Integer.parseInt(playerUpdate[3]));
 				p.setDirection(Direction.fromString(playerUpdate[5]));
+				gamePlayer.slist.updateScoreOnScreen(p);
 			} 
 			else{
 				// Opret ny spiller
