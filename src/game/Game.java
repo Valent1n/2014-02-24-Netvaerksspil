@@ -71,7 +71,7 @@ public class Game {
 		ScoreList s = new ScoreList(players);
 		s.setVisible(true);
 		Network network = Network.getNetwork();
-		GamePlayer g = new GamePlayer(me,network);
+		GamePlayer g = new GamePlayer(network);
 	}
 
 }

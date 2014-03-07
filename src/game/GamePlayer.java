@@ -18,77 +18,97 @@ public class GamePlayer {
 	ScoreList slist;
 
 	// level is defined column by column
-	private String[][] level = {
-			{ "w", "w", "w", "w", "w", "w", "w", "w", "w", "w", "w", "w", "w",
-					"w", "w", "w", "w", "w", "w", "w" },
-			{ "w", "e", "e", "e", "e", "e", "e", "e", "e", "w", "w", "e", "e",
-					"e", "e", "e", "e", "e", "e", "w" },
-			{ "w", "e", "w", "e", "e", "w", "e", "e", "w", "w", "w", "e", "w",
-					"e", "e", "w", "e", "e", "w", "w" },
-			{ "w", "e", "w", "e", "e", "w", "e", "e", "e", "w", "w", "e", "w",
-					"e", "e", "w", "e", "e", "w", "w" },
-			{ "w", "e", "e", "w", "e", "e", "e", "e", "e", "e", "e", "e", "e",
-					"e", "e", "e", "e", "e", "e", "w" },
-			{ "w", "e", "w", "e", "w", "e", "w", "e", "w", "e", "w", "e", "w",
-					"e", "e", "w", "e", "e", "w", "w" },
-			{ "w", "e", "w", "e", "e", "e", "e", "e", "w", "w", "w", "e", "w",
-					"e", "e", "w", "e", "e", "w", "w" },
-			{ "w", "e", "w", "e", "e", "e", "e", "e", "w", "e", "w", "e", "w",
-					"e", "e", "w", "e", "e", "w", "w" },
-			{ "w", "e", "e", "e", "w", "e", "w", "e", "e", "w", "e", "e", "w",
-					"e", "e", "w", "e", "e", "e", "w" },
-			{ "w", "e", "e", "e", "e", "e", "w", "e", "e", "w", "e", "e", "w",
-					"e", "e", "w", "e", "e", "e", "w" },
-			{ "w", "e", "w", "w", "e", "w", "w", "e", "e", "e", "e", "e", "e",
-					"e", "e", "w", "e", "e", "w", "w" },
-			{ "w", "e", "e", "w", "e", "w", "e", "e", "e", "e", "w", "e", "e",
-					"e", "e", "w", "e", "e", "w", "w" },
-			{ "w", "e", "e", "e", "e", "e", "e", "e", "e", "w", "w", "e", "w",
-					"e", "e", "w", "e", "e", "w", "w" },
-			{ "w", "e", "e", "e", "e", "e", "e", "e", "e", "e", "w", "e", "w",
-					"e", "e", "w", "e", "e", "w", "w" },
-			{ "w", "e", "e", "e", "e", "e", "e", "e", "e", "w", "e", "e", "e",
-					"e", "e", "w", "e", "e", "w", "w" },
-			{ "w", "e", "e", "w", "e", "e", "e", "e", "e", "e", "e", "e", "e",
-					"e", "e", "e", "e", "e", "w", "w" },
-			{ "w", "e", "e", "w", "e", "w", "w", "w", "e", "e", "w", "e", "w",
-					"e", "e", "w", "w", "e", "w", "w" },
-			{ "w", "e", "w", "e", "e", "e", "e", "e", "e", "w", "w", "e", "w",
-					"e", "e", "e", "e", "e", "w", "w" },
-			{ "w", "e", "e", "e", "w", "e", "e", "e", "w", "w", "e", "e", "w",
-					"e", "e", "e", "e", "e", "e", "w" },
-			{ "w", "w", "w", "w", "w", "w", "w", "w", "w", "w", "w", "w", "w",
-					"w", "w", "w", "w", "w", "w", "w" }, };
+	private String[] level;
+//	private String[][] level = {
+//			{ "w", "w", "w", "w", "w", "w", "w", "w", "w", "w", "w", "w", "w",
+//					"w", "w", "w", "w", "w", "w", "w" },
+//			{ "w", "e", "e", "e", "e", "e", "e", "e", "e", "w", "w", "e", "e",
+//					"e", "e", "e", "e", "e", "e", "w" },
+//			{ "w", "e", "w", "e", "e", "w", "e", "e", "w", "w", "w", "e", "w",
+//					"e", "e", "w", "e", "e", "w", "w" },
+//			{ "w", "e", "w", "e", "e", "w", "e", "e", "e", "w", "w", "e", "w",
+//					"e", "e", "w", "e", "e", "w", "w" },
+//			{ "w", "e", "e", "w", "e", "e", "e", "e", "e", "e", "e", "e", "e",
+//					"e", "e", "e", "e", "e", "e", "w" },
+//			{ "w", "e", "w", "e", "w", "e", "w", "e", "w", "e", "w", "e", "w",
+//					"e", "e", "w", "e", "e", "w", "w" },
+//			{ "w", "e", "w", "e", "e", "e", "e", "e", "w", "w", "w", "e", "w",
+//					"e", "e", "w", "e", "e", "w", "w" },
+//			{ "w", "e", "w", "e", "e", "e", "e", "e", "w", "e", "w", "e", "w",
+//					"e", "e", "w", "e", "e", "w", "w" },
+//			{ "w", "e", "e", "e", "w", "e", "w", "e", "e", "w", "e", "e", "w",
+//					"e", "e", "w", "e", "e", "e", "w" },
+//			{ "w", "e", "e", "e", "e", "e", "w", "e", "e", "w", "e", "e", "w",
+//					"e", "e", "w", "e", "e", "e", "w" },
+//			{ "w", "e", "w", "w", "e", "w", "w", "e", "e", "e", "e", "e", "e",
+//					"e", "e", "w", "e", "e", "w", "w" },
+//			{ "w", "e", "e", "w", "e", "w", "e", "e", "e", "e", "w", "e", "e",
+//					"e", "e", "w", "e", "e", "w", "w" },
+//			{ "w", "e", "e", "e", "e", "e", "e", "e", "e", "w", "w", "e", "w",
+//					"e", "e", "w", "e", "e", "w", "w" },
+//			{ "w", "e", "e", "e", "e", "e", "e", "e", "e", "e", "w", "e", "w",
+//					"e", "e", "w", "e", "e", "w", "w" },
+//			{ "w", "e", "e", "e", "e", "e", "e", "e", "e", "w", "e", "e", "e",
+//					"e", "e", "w", "e", "e", "w", "w" },
+//			{ "w", "e", "e", "w", "e", "e", "e", "e", "e", "e", "e", "e", "e",
+//					"e", "e", "e", "e", "e", "w", "w" },
+//			{ "w", "e", "e", "w", "e", "w", "w", "w", "e", "e", "w", "e", "w",
+//					"e", "e", "w", "w", "e", "w", "w" },
+//			{ "w", "e", "w", "e", "e", "e", "e", "e", "e", "w", "w", "e", "w",
+//					"e", "e", "e", "e", "e", "w", "w" },
+//			{ "w", "e", "e", "e", "w", "e", "e", "e", "w", "w", "e", "e", "w",
+//					"e", "e", "e", "e", "e", "e", "w" },
+//			{ "w", "w", "w", "w", "w", "w", "w", "w", "w", "w", "w", "w", "w",
+//					"w", "w", "w", "w", "w", "w", "w" }, };
 	// level is defined column by column
 	Screen screen;
 
-	public GamePlayer(Player me, ScoreList s, String[][] level, Network network) {
+	public GamePlayer(Network network) {
 		this.network = network;
 		players = new HashSet<Player>();
-		this.level = level;
-		this.me = me;
-		players.add(me);
-		this.slist = s;
-		screen = new Screen(level, me.getXpos(), me.getYpos());
-		screen.setVisible(true);
-		ko = new KeyClass(this, me);
-		screen.addKeyListener(ko);
-
-	}
-
-	public GamePlayer(Player me, Network network) {
-		this.network = network;
-		players = new HashSet<Player>();
-		this.me = me;
-		players.add(me);
-		screen = new Screen(level, me.getXpos(), me.getYpos());
-		screen.setVisible(true);
-		ko = new KeyClass(this, me);
-		screen.addKeyListener(ko);
-
 	}
 	
+	public void startGame(String level, String name, int id){
+		//TODO
+		setMe(name, id);
+		createMap(level);
+//		ko = new KeyClass(this, me);
+//		screen = new Screen(this.level, me.getXpos(), me.getYpos());
+//		screen.setVisible(true);
+//		screen.addKeyListener(ko);
+	}
 	
+	public void createMap(String levelFromNetwork){
+		//TODO
+		String [] mapDimensonsAndMapRows = levelFromNetwork.split(" ");
+		String [] mapRows = levelFromNetwork.split("\n");
+		int yDim = Integer.parseInt(mapDimensonsAndMapRows[2]);
+		String[] newLevel = new String[yDim];
+		for(int i = 1; i < mapRows.length; i++){
+			newLevel[i-1] = mapRows[i];
+		}
+		level = newLevel;
+ 	}
+	
+	
+	public Player getMe() {
+		return me;
+	}
+
+	public void setMe(String name, int id) {
+		if(me == null){
+			me = new Player(name, id);
+			players.add(me);
+		} else{
+			if(players.contains(me)){
+				players.remove(me);
+			}
+			me = new Player(name, id);
+			players.add(me);
+		}
+		
+	}
+
 	public void moveMe(Direction direction){
 		network.sendMove(direction);
 	}
@@ -117,7 +137,7 @@ public class GamePlayer {
 			y = player.getYpos() + 1;
 		}
 		;
-		if (level[x][y].equals(wall)) {
+		if (level[y].charAt(x) == 'w' ) {
 			player.subOnePoint();
 			slist.updateScoreOnScreen(player);
 		} else {

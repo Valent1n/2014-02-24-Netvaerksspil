@@ -26,7 +26,6 @@ public class Network extends Thread {
 	private static final int bufferSize = 65536;
 	private static final String host = "localhost";
 	private static final int port = 7542;
-	private int id;
 	private InputThread it;
 	private OutputThread ot;
 
@@ -82,12 +81,16 @@ public class Network extends Thread {
 				received = receivePacket(host, port);
 			}
 			System.out.println(received);
-			String[] stringArrayProtocol = received.split("\n");
+			//Adskil greeting, login og userid, map
+			String[] stringArrayProtocol = received.split("\n", 3);
+			//Adskil login og userid
 			String[] stringArrayContent = stringArrayProtocol[1].split(" ");
 			if (checkProtocol(stringArrayProtocol[0])) {
 				if (stringArrayContent[0].equals("Granted")) {
 					System.out.println("Login granted!");
-					id = Integer.parseInt(stringArrayContent[1]);
+					int id = Integer.parseInt(stringArrayContent[1]);
+					String level = stringArrayProtocol[2];
+					gamePlayer.startGame(level, brugernavn, id);
 					return true;
 				} else {
 					System.out.println("Login denied!");
@@ -130,10 +133,19 @@ public class Network extends Thread {
 		try {
 			// 1. Prøv at forbinde til hosten
 			String brugernavn = "Lars";
+			//FJERN DEN HER NÅR DER ER LAVET EN CONSTRUCTOR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+			//FJERN DEN HER NÅR DER ER LAVET EN CONSTRUCTOR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+			//FJERN DEN HER NÅR DER ER LAVET EN CONSTRUCTOR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+			//FJERN DEN HER NÅR DER ER LAVET EN CONSTRUCTOR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+			//FJERN DEN HER NÅR DER ER LAVET EN CONSTRUCTOR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+			//FJERN DEN HER NÅR DER ER LAVET EN CONSTRUCTOR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+			//FJERN DEN HER NÅR DER ER LAVET EN CONSTRUCTOR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+			//FJERN DEN HER NÅR DER ER LAVET EN CONSTRUCTOR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+			//FJERN DEN HER NÅR DER ER LAVET EN CONSTRUCTOR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+			gamePlayer = new GamePlayer(this);
 			if (logon(host, port, brugernavn)) {
 				System.out.println("Forbundet til " + socket.getInetAddress()
 						+ " port: " + socket.getPort());
-				gamePlayer = new GamePlayer(new Player(brugernavn, id), this);
 				// 2: Start trådene som snakker med serveren
 				it = new InputThread();
 				ot = new OutputThread();
