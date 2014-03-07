@@ -10,7 +10,7 @@ public class GamePlayer {
 
 	Player me;
 
-	private String wall = "w";
+	private char wall = 'w';
 	private KeyClass ko;
 	private Set<Player> players;
 	private Network network;
@@ -63,8 +63,7 @@ public class GamePlayer {
 	// level is defined column by column
 	Screen screen;
 
-	public GamePlayer(Network network) {
-		this.network = network;
+	public GamePlayer() {
 		players = new HashSet<Player>();
 	}
 	
@@ -80,8 +79,8 @@ public class GamePlayer {
 	
 	public void createMap(String levelFromNetwork){
 		//TODO
-		String [] mapDimensonsAndMapRows = levelFromNetwork.split(" ");
 		String [] mapRows = levelFromNetwork.split("\n");
+		String [] mapDimensonsAndMapRows =mapRows[0].split(" ");
 		int yDim = Integer.parseInt(mapDimensonsAndMapRows[2]);
 		String[] newLevel = new String[yDim];
 		for(int i = 1; i < mapRows.length; i++){
@@ -90,7 +89,14 @@ public class GamePlayer {
 		level = newLevel;
  	}
 	
-	
+	public Network getNetwork() {
+		return network;
+	}
+
+	public void setNetwork(Network network) {
+		this.network = network;
+	}
+
 	public Player getMe() {
 		return me;
 	}
@@ -123,7 +129,7 @@ public class GamePlayer {
 
 	public void PlayerMoved(Direction direction, Player player) {
 		// TODO Spilleren med id fra parameter bevæges
-		player.setDirection(direction);;
+		player.setDirection(direction);
 		int x = player.getXpos(), y = player.getYpos();
 		if (direction.equals(Direction.RIGHT)) {
 			x = player.getXpos() + 1;
@@ -141,7 +147,7 @@ public class GamePlayer {
 			y = player.getYpos() + 1;
 		}
 		;
-		if (level[y].charAt(x) == 'w' ) {
+		if (level[y].charAt(x) == wall) {
 			player.subOnePoint();
 			slist.updateScoreOnScreen(player);
 		} else {
