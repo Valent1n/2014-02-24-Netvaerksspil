@@ -169,7 +169,9 @@ public class Network extends Thread {
 
 		public void run() {
 			while (true) {
-				sendAction();
+				if(!actionBuffer.isEmpty()){
+					sendAction();
+				}
 				try {
 					synchronized (this) {
 						wait(msBetweenPackets);
@@ -208,12 +210,12 @@ public class Network extends Thread {
 		}
 		
 		public void sendMove(Direction direction){
-			String msg = "\n" + direction;
+			String msg = "\nmove" + direction.toString().toLowerCase();
 			actionBuffer.add(msg);
 		}
 		
 		public void sendShoot(){
-			String msg = "\n" + "Shoot";
+			String msg = "\n" + "shoot";
 			actionBuffer.add(msg);
 		}
 		
