@@ -25,6 +25,7 @@ public class Network extends Thread {
 	private String name;
 	private InputThread it;
 	private OutputThread ot;
+	private static final int msBetweenPackets = 50; 
 	
 	//  Temp constructor - bruger faste værdier af ip og port
 	public Network(String name, GamePlayer gamePlayer) {
@@ -36,7 +37,7 @@ public class Network extends Thread {
 			e.printStackTrace();
 		}
 		//TODO //LAV NETWORK OM TIL EN TRÅD!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		run();
+		this.start();
 	}
 
 	
@@ -51,7 +52,7 @@ public class Network extends Thread {
 			e.printStackTrace();
 		}
 		//TODO //LAV NETWORK OM TIL EN TRÅD!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		run();
+		this.start();
 	}
 
 	public GamePlayer getGamePlayer() {
@@ -70,8 +71,6 @@ public class Network extends Thread {
 	public void sendShoot() {
 		ot.sendShoot();
 	}
-	
-
 	
 	public void sendMove(Direction direction) {
 		ot.sendMove(direction);
@@ -169,7 +168,14 @@ public class Network extends Thread {
 
 		public void run() {
 			while (true) {
-				
+				sendAction();
+				try {
+					synchronized (this) {
+						wait(msBetweenPackets);
+					}
+				} catch (InterruptedException e) {
+					/*nothing*/
+				}
 			}
 		}
 		
@@ -180,7 +186,9 @@ public class Network extends Thread {
 			} catch (IOException e) {
 				System.out.println("Logoff failed!" + e.getMessage());
 			}
-			
+			System.out.println(name + " has successfully been logged out!");
+			System.exit(0);
+			// TODO: Kill application
 		}
 
 		public void sendAction(){

@@ -1,6 +1,8 @@
 package game;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class GamePlayer {
@@ -12,7 +14,7 @@ public class GamePlayer {
 
 	private char wall = 'w';
 	private KeyClass ko;
-	private Set<Player> players;
+	private List<Player> players;
 	private Network network;
 
 	ScoreList slist;
@@ -63,8 +65,35 @@ public class GamePlayer {
 	// level is defined column by column
 	Screen screen;
 
+	public GamePlayer(Player me, ScoreList s, String[] level, Network network) {
+		this.network = network;
+		players = new ArrayList<Player>();
+		this.level = level;
+		this.me = me;
+		players.add(me);
+		this.slist = s;
+		screen = new Screen(level);
+		screen.setVisible(true);
+		ko = new KeyClass(this, me);
+		screen.addKeyListener(ko);
+
+	}
+
+	public GamePlayer(Player me, Network network) {
+		this.network = network;
+		players = new ArrayList<Player>();
+		this.me = me;
+		players.add(me);
+		this.slist = new ScoreList(players);
+		slist.setVisible(true);
+		screen = new Screen(level);
+		screen.setVisible(true);
+		ko = new KeyClass(this, me);
+		screen.addKeyListener(ko);
+	}
+
 	public GamePlayer() {
-		players = new HashSet<Player>();
+		players = new ArrayList<Player>();
 	}
 	
 	public void startGame(String level, String name, int id){
@@ -95,7 +124,9 @@ public class GamePlayer {
 	}
 
 	public void setNetwork(Network network) {
+		System.out.println("LALALA");
 		this.network = network;
+		System.out.println(this.network);
 	}
 
 	public Player getMe() {
@@ -158,11 +189,11 @@ public class GamePlayer {
 		network.logOff();
 	}
 
-	public Set<Player> getPlayers() {
+	public List<Player> getPlayers() {
 		return players;
 	}
 
-	public void setPlayers(Set<Player> players) {
+	public void setPlayers(List<Player> players) {
 		this.players = players;
 	}
 
@@ -177,6 +208,7 @@ public class GamePlayer {
 	
 	public void addPlayer(Player p){
 		players.add(p);
+		slist.updateScoreOnScreen(p);
 	}
 
 	// TODO Getplayerid, hvis id'et ikke findes i settet så oprettes spilleren,

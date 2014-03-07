@@ -25,6 +25,9 @@ public class KeyClass implements KeyListener {
 		if (ke.getKeyCode() == ke.VK_RIGHT) {
 			g.moveMe(Direction.RIGHT);
 		}
+		if(ke.getKeyCode() == ke.VK_ESCAPE) {
+			g.logOff();
+		}
 	}
 
 		public void keyReleased(KeyEvent ke) {
