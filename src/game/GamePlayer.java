@@ -1,6 +1,8 @@
 package game;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class GamePlayer {
@@ -12,7 +14,7 @@ public class GamePlayer {
 
 	private String wall = "w";
 	private KeyClass ko;
-	private Set<Player> players;
+	private List<Player> players;
 	private Network network;
 
 	ScoreList slist;
@@ -64,7 +66,7 @@ public class GamePlayer {
 
 	public GamePlayer(Player me, ScoreList s, String[][] level, Network network) {
 		this.network = network;
-		players = new HashSet<Player>();
+		players = new ArrayList<Player>();
 		this.level = level;
 		this.me = me;
 		players.add(me);
@@ -78,9 +80,11 @@ public class GamePlayer {
 
 	public GamePlayer(Player me, Network network) {
 		this.network = network;
-		players = new HashSet<Player>();
+		players = new ArrayList<Player>();
 		this.me = me;
 		players.add(me);
+		this.slist = new ScoreList(players);
+		slist.setVisible(true);
 		screen = new Screen(level, me.getXpos(), me.getYpos());
 		screen.setVisible(true);
 		ko = new KeyClass(this, me);
@@ -134,11 +138,11 @@ public class GamePlayer {
 		}
 	}
 
-	public Set<Player> getPlayers() {
+	public List<Player> getPlayers() {
 		return players;
 	}
 
-	public void setPlayers(Set<Player> players) {
+	public void setPlayers(List<Player> players) {
 		this.players = players;
 	}
 
@@ -153,6 +157,7 @@ public class GamePlayer {
 	
 	public void addPlayer(Player p){
 		players.add(p);
+		slist.updateScoreOnScreen(p);
 	}
 
 	// TODO Getplayerid, hvis id'et ikke findes i settet så oprettes spilleren,

@@ -176,7 +176,9 @@ public class Network extends Thread {
 			} catch (IOException e) {
 				System.out.println("Logoff failed!" + e.getMessage());
 			}
-			
+			System.out.println(name + " has successfully been logged out!");
+			System.exit(0);
+			// TODO: Kill application
 		}
 
 		public void sendAction(){
