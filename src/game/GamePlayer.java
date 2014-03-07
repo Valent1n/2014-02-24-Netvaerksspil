@@ -172,10 +172,8 @@ public class GamePlayer {
 				;
 				if (level[y].charAt(x) == wall) {
 					me.subOnePoint();
-					slist.updateScoreOnScreen(me);
 				} else {
 					me.addOnePoint();
-					slist.updateScoreOnScreen(me);
 					screen.movePlayerOnScreen(me.getXpos(), me.getYpos(), x, y,
 							me.getDirection());
 					me.setXpos(x);
@@ -210,6 +208,7 @@ public class GamePlayer {
 	
 	public void addPlayer(Player p){
 		players.add(p);
+		slist.players = players;
 		slist.updateScoreOnScreen(p);
 	}
 

@@ -113,6 +113,7 @@ public class NetworkServer implements PlayerObserver, Closeable {
 			player.addObserver(this);
 			sendRawMessage(bytes, bytes.length, address, port);
 		}
+		sendStateThread.interrupt();
 		
 	}
 	
@@ -172,13 +173,13 @@ public class NetworkServer implements PlayerObserver, Closeable {
 		Set<ServerPlayer> players = gameServer.getPlayers();
 		sb.append(protocolName + " " + protocolVersion);
 		
-		String pattern = "\n%i %i %i %i %s %i";
+		String pattern = "\n%d %d %d %d %s %d";
 		for (ServerPlayer p : players) {
-//			String line = String.format(pattern, p.getId(), p.getXpos(), p.getYpos(), 
-//					p.getPoint(), p.getName(), p.getDirection().ordinal());
-//			sb.append(line);
-			String hej = "\n" + p.getId() + " " + p.getXpos() + " " + p.getYpos() + " " + p.getPoint() + " " + p.getName() + " " + p.getDirection().ordinal();
-			sb.append(hej);
+			String line = String.format(pattern, p.getId(), p.getXpos(), p.getYpos(), 
+					p.getPoint(), p.getName(), p.getDirection().ordinal());
+			sb.append(line);
+//			String hej = "\n" + p.getId() + " " + p.getXpos() + " " + p.getYpos() + " " + p.getPoint() + " " + p.getName() + " " + p.getDirection().ordinal();
+//			sb.append(hej);
 		}
 		byte[] bytes = sb.toString().getBytes(charset);
 		

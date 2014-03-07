@@ -269,6 +269,7 @@ public class Network extends Thread {
 			}
 			i++;
 		}
+		System.out.println(gamePlayer.getPlayers());
 	}
 	}
 }
