@@ -46,7 +46,7 @@ public class Screen  extends JFrame {
 	}
 	public void movePlayerOnScreen(int oldX, int oldY, int x, int y,Direction playerDirection) {
 	
-		labels[oldX][oldY].setIcon(new ImageIcon(eIcon));
+		labels[oldY][oldX].setIcon(new ImageIcon(eIcon));
 
 		labels[y][x].setIcon(new ImageIcon(heroIcons[playerDirection.ordinal()]));
 	}
