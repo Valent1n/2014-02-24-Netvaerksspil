@@ -26,6 +26,7 @@ public class KeyClass implements KeyListener {
 			g.moveMe(Direction.RIGHT);
 		}
 		if(ke.getKeyCode() == ke.VK_ESCAPE) {
+			System.out.println(g.getNetwork());
 			g.logOff();
 		}
 	}

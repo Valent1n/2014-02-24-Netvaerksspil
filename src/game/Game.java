@@ -18,19 +18,56 @@ public class Game {
 		System.out.println("Indtast dit spillernavn");
 		BufferedReader b = new BufferedReader (new InputStreamReader(System.in));
 		String username = b.readLine();
-		System.out.println("Indtast Servernavn:");
-		String serverName = b.readLine();
+
+//		System.out.println("Indtast Servernavn:");
+//		String serverName = b.readLine();
+		
+//		 String[][] level = {
+//					{ "w", "w", "w", "w", "w", "w", "w", "w", "w", "w", "w", "w",
+//							"w", "w", "w", "w", "w", "w", "w", "w" },
+//					{ "w", "e", "e", "e", "e", "e", "e", "e", "e", "w", "w", "e", "e",
+//							"e", "e", "e", "e", "e", "e", "w" },
+//					{ "w", "e", "w", "e", "e", "w", "e", "e", "w", "w", "w", "e", "w",
+//							"e", "e", "w", "e", "e", "w", "w" },
+//					{ "w", "e", "w", "e", "e", "w", "e", "e", "e", "w", "w", "e", "w",
+//							"e", "e", "w", "e", "e", "w", "w" },
+//					{ "w", "e", "e", "w", "e", "e", "e", "e", "e", "e", "e", "e", "e",
+//							"e", "e", "e", "e", "e", "e", "w" },
+//					{ "w", "e", "w", "e", "w", "e", "w", "e", "w", "e", "w", "e", "w",
+//							"e", "e", "w", "e", "e", "w", "w" },
+//					{ "w", "e", "w", "e", "e", "e", "e", "e", "w", "w", "w", "e", "w",
+//							"e", "e", "w", "e", "e", "w", "w" },
+//					{ "w", "e", "w", "e", "e", "e", "e", "e", "w", "e", "w", "e", "w",
+//							"e", "e", "w", "e", "e", "w", "w" },
+//					{ "w", "e", "e", "e", "w", "e", "w", "e", "e", "w", "e", "e", "w",
+//							"e", "e", "w", "e", "e", "e", "w" },
+//					{ "w", "e", "e", "e", "e", "e", "w", "e", "e", "w", "e", "e", "w",
+//							"e", "e", "w", "e", "e", "e", "w" },
+//					{ "w", "e", "w", "w", "e", "w", "w", "e", "e", "e", "e", "e", "e",
+//							"e", "e", "w", "e", "e", "w", "w" },
+//					{ "w", "e", "e", "w", "e", "w", "e", "e", "e", "e", "w", "e", "e",
+//							"e", "e", "w", "e", "e", "w", "w" },
+//					{ "w", "e", "e", "e", "e", "e", "e", "e", "e", "w", "w", "e", "w",
+//							"e", "e", "w", "e", "e", "w", "w" },
+//					{ "w", "e", "e", "e", "e", "e", "e", "e", "e", "e", "w", "e", "w",
+//							"e", "e", "w", "e", "e", "w", "w" },
+//					{ "w", "e", "e", "e", "e", "e", "e", "e", "e", "w", "e", "e", "e",
+//							"e", "e", "w", "e", "e", "w", "w" },
+//					{ "w", "e", "e", "w", "e", "e", "e", "e", "e", "e", "e", "e", "e",
+//							"e", "e", "e", "e", "e", "w", "w" },
+//					{ "w", "e", "e", "w", "e", "w", "w", "w", "e", "e", "w", "e", "w",
+//							"e", "e", "w", "w", "e", "w", "w" },
+//					{ "w", "e", "w", "e", "e", "e", "e", "e", "e", "w", "w", "e", "w",
+//							"e", "e", "e", "e", "e", "w", "w" },
+//					{ "w", "e", "e", "e", "w", "e", "e", "e", "w", "w", "e", "e", "w",
+//							"e", "e", "e", "e", "e", "e", "w" },
+//					{ "w", "w", "w", "w", "w", "w", "w", "w", "w", "w", "w", "w",
+//							"w", "w", "w", "w", "w", "w", "w", "w" }, };
 		 
-		players = new ArrayList<Player>();
-		me = new Player(username, -1);
-		players.add(me);
+//		players = new ArrayList<Player>();
+//		me = new Player(username, -1);
+//		players.add(me);
 		
-//		Network network = new Network(username, null);
-//		GamePlayer g = new GamePlayer(me, network);
-//		network.setGamePlayer(g);
-		
-//		ScoreList s = new ScoreList(players);
-//		s.setVisible(true);
 		GamePlayer g = new GamePlayer();
 		Network network = new Network(username, g);
 		g.setNetwork(network);
