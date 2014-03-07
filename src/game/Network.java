@@ -25,6 +25,7 @@ public class Network extends Thread {
 	private String name;
 	private InputThread it;
 	private OutputThread ot;
+	private static final int msBetweenPackets = 50; 
 	
 	//  Temp constructor - bruger faste værdier af ip og port
 	public Network(String name, GamePlayer gamePlayer) {
@@ -167,7 +168,14 @@ public class Network extends Thread {
 
 		public void run() {
 			while (true) {
-				
+				sendAction();
+				try {
+					synchronized (this) {
+						wait(msBetweenPackets);
+					}
+				} catch (InterruptedException e) {
+					/*nothing*/
+				}
 			}
 		}
 		

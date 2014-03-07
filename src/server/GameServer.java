@@ -16,17 +16,23 @@ public class GameServer implements Closeable {
 	private static final long cleanupInactivityMs = 20000;
 	private static final long msBetweenCleanups = 2000;
 	private static final String[] defaultMapLayout = new String[] {
-		"wwwewwwwwwwwwwwwww",
-		"weeeeeeeeeeeeeeeew",
-		"wewweeewweeeeeeeew",
-		"weeeeeeeweeeewwwew",
-		"weeeeeewweeeeweeew",
-		"wwwweeeeeeeeeweeew",
-		"weeeeeewweeeeeeeew",
-		"wwwewwwwwwwwwwwwww"
+		"wwwwwwwwwwwwww",
+		"weeeeeeeeeeeew",
+		"weeeeeeeeeeeew",
+		"weeeeeeeeeeeew",
+		"weeeeeeeeeeeew",
+		"weeeeeeeeeeeew",
+		"weeeeeeeeeeeew",
+		"weeeeeeweeeeew",
+		"weeeeeeweeeeew",
+		"weeeeeeweeeeew",
+		"weeeeeeeeeeeew",
+		"weeeeeeeeeeeew",
+		"weeeeeeeeeeeew",
+		"wwwwwwwwwwwwww"
 	};
-	private static final int defaultSpawnX = 1;
-	private static final int defaultSpawnY = 1;
+	private static final int defaultSpawnX = 2;
+	private static final int defaultSpawnY = 2;
 	
 	
 	private Map<PortIP, ServerPlayer> players = new HashMap<>();
