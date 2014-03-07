@@ -17,13 +17,13 @@ public class Player {
 	private boolean observationPaused;
 	private boolean changedSinceLastNotify;
 	
-	public Player(String name, int id, int xpos, int ypos) {
+	public Player(String name, int id, int xpos, int ypos, int score, Direction direction) {
 		this.id = id;
 		this.name = name;
 		this.xpos = xpos;
 		this.ypos = ypos;
-		point = 0;
-		direction = Direction.UP;
+		point = score;
+		this.direction = direction;
 		observers = new ArrayList<>();
 		observationPaused = false;
 		changedSinceLastNotify = false;

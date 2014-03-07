@@ -2,6 +2,7 @@ package server;
 
 import java.net.InetAddress;
 
+import game.Direction;
 import game.Player;
 
 public class ServerPlayer extends Player {
@@ -10,8 +11,8 @@ public class ServerPlayer extends Player {
 	private InetAddress ip;
 	private int port;
 	private long lastLifeSign;
-	public ServerPlayer(String name, int id, int spawnX, int spawnY, InetAddress ip, int port) {
-		super(name, id, spawnX, spawnY);
+	public ServerPlayer(String name, int id, int spawnX, int spawnY, InetAddress ip, int port, int score, Direction direction) {
+		super(name, id, spawnX, spawnY, score, direction);
 		this.ip = ip;
 		this.port = port;
 		registerLifeSign();
