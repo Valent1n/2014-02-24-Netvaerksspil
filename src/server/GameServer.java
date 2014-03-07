@@ -56,8 +56,8 @@ public class GameServer implements Closeable {
 		this.spawnY = spawnY;
 		mapDimX = mapLayout[0].length();
 		mapDimY = mapLayout.length;
-		cleanupThread = new Thread(new CleanupThread());
-		cleanupThread.start();
+//		cleanupThread = new Thread(new CleanupThread());
+//		cleanupThread.start();
 	}
 
 
