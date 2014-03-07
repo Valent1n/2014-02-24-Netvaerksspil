@@ -116,6 +116,10 @@ public class GamePlayer {
 	public void shoot(){
 		network.sendShoot();
 	}
+	
+	public void logOff() {
+		network.logOff();
+	}
 
 	public void PlayerMoved(Direction direction, Player player) {
 		// TODO Spilleren med id fra parameter bevæges

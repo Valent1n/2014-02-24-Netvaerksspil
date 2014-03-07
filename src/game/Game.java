@@ -70,8 +70,9 @@ public class Game {
 		
 		ScoreList s = new ScoreList(players);
 		s.setVisible(true);
-		Network network = Network.getNetwork();
+		Network network = new Network(username, null);
 		GamePlayer g = new GamePlayer(network);
+		network.setGamePlayer(g);
 	}
 
 }

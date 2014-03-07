@@ -15,7 +15,6 @@ public class KeyClass implements KeyListener {
 		public void keyPressed(KeyEvent ke) {
 			if (ke.getKeyCode() == ke.VK_UP) {
 				g.PlayerMoved(Direction.UP, me);
-				//TODO 
 			}
 
 			if (ke.getKeyCode() == ke.VK_DOWN) {
@@ -26,6 +25,9 @@ public class KeyClass implements KeyListener {
 			}
 			if (ke.getKeyCode() == ke.VK_RIGHT) {
 				g.PlayerMoved(Direction.RIGHT, me);
+			}
+			if(ke.getKeyCode() == ke.VK_ESCAPE) {
+				g.logOff();
 			}
 	}
 
