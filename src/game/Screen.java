@@ -24,7 +24,7 @@ public class Screen  extends JFrame {
 	
 	private String[] level;
 	int dimX, dimY;
-
+	
 	
 	public Screen(String[] level)
 	{
