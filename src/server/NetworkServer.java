@@ -31,7 +31,7 @@ public class NetworkServer implements PlayerObserver, Closeable {
 	private static final String versionRegex = " (\\d+(?:\\.\\d+)*)\n"; 
 	private static final String greetingRegex = protocolName + versionRegex; 
 	private static final Pattern actionsPatt = Pattern.compile(greetingRegex + 
-				"((?:\\nMove(?:up|down|left|right))*)");
+				"((?:move(?:up|down|left|right)\n)*)");
 	private static final Pattern movePatt = Pattern.compile("^move(up|down|left|right)$");
 	private static final Pattern shootPatt = Pattern.compile("shoot");
 	private static final Pattern loginPatt = Pattern.compile(greetingRegex + "Login ([\\w]+)");
@@ -95,6 +95,7 @@ public class NetworkServer implements PlayerObserver, Closeable {
 			handleLogoff(address, port);
 			return;
 		}
+		System.out.println("No matching packet!");
 	}
 	
 	private void handleLogin(String playerName, String protocolVersion, InetAddress address, int port) {
