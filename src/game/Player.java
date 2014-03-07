@@ -17,11 +17,6 @@ public class Player {
 	private boolean observationPaused;
 	private boolean changedSinceLastNotify;
 	
-	public Player(String name, int id) {
-		this(name, id, 9, 7);
-	}
-	
-
 	public Player(String name, int id, int xpos, int ypos) {
 		this.id = id;
 		this.name = name;

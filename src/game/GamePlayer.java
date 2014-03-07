@@ -137,13 +137,13 @@ public class GamePlayer {
 
 	public void setMe(String name, int id) {
 		if(me == null){
-			me = new Player(name, id);
+			me = new Player(name, id, 0, 0);
 			players.add(me);
 		} else{
 			if(players.contains(me)){
 				players.remove(me);
 			}
-			me = new Player(name, id);
+			me = new Player(name, id, 0, 0);
 			players.add(me);
 		}
 		
