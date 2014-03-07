@@ -3,6 +3,7 @@ package game;
 import java.awt.GridLayout;
 
 
+
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -44,12 +45,16 @@ public class Screen  extends JFrame implements PlayerObserver {
 		this.repaint();
 		this.setVisible(true);
 	}
-	public void movePlayerOnScreen(int oldX, int oldY, int x, int y,Direction playerDirection) {
-		if (!(oldX < 0 || oldY < 0)) {
+	private void movePlayerOnScreen(int oldX, int oldY, int x, int y,Direction playerDirection) {
+		if (playerDirection == null) {
+			throw new NullPointerException("PlayerDirection was null");
+		}
+		if (!(oldX < 0 || oldY < 0 || oldX > dimX || oldY > dimY)) {
 			
 			labels[oldY][oldX].setIcon(new ImageIcon(eIcon));
 		}
-		if ((! (x < 0 || y < 0)) && playerDirection != null) {
+		
+		if ((! (x < 0 || y < 0 || x > dimX || y > dimY)) && playerDirection != null) {
 			labels[y][x].setIcon(new ImageIcon(heroIcons[playerDirection.ordinal()]));
 		}
 	}
