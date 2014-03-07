@@ -265,9 +265,6 @@ public class NetworkServer implements PlayerObserver, Closeable {
 				try {
 					DatagramPacket packet = receivePacket();
 					handlePacket(packet);
-					byte[] byteArray = packet.getData();
-					String reconstitutedString = new String(byteArray);
-					System.out.println(reconstitutedString);
 				} catch (SocketTimeoutException e) {
 					/* Nothing, just keep looping */
 				} catch (Exception e) {

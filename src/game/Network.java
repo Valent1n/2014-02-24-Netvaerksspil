@@ -83,37 +83,29 @@ public class Network extends Thread {
 	public boolean logon() {
 		String msg = protocolName + " " + protocolVersion + "\n" + "Login"
 				+ " " + name;
-		System.out.println("Prøver at forbinde til " + host
-				+ " port: " + port);
 		try {
 			sendPacket(host, port, msg);
 			String received = null;
 			while (received == null) {
 				received = receivePacket(host, port);
 			}
-			System.out.println(received);
 			//Adskil greeting, login og userid, map
 			String[] stringArrayProtocol = received.split("\n", 3);
 			//Adskil login og userid
 			String[] stringArrayContent = stringArrayProtocol[1].split(" ");
 			if (checkProtocol(stringArrayProtocol[0])) {
 				if (stringArrayContent[0].equals("Granted")) {
-					System.out.println("Login granted!");
 					int id = Integer.parseInt(stringArrayContent[1]);
 					String level = stringArrayProtocol[2];
 					Player player = new Player(name, id, tempStartX, tempStartY);
 					gamePlayer.startGame(level, player);
 					return true;
 				} else {
-					System.out.println("Login denied!");
 				}
 
 			} else {
-				System.out.println("Protocol mismatch.");
 			}
 		} catch (IOException e) {
-			System.out.println("Kunne ikke forbinde til "
-					+ host + " port: " + port);
 			e.printStackTrace();
 			return false;
 		}
@@ -127,7 +119,6 @@ public class Network extends Thread {
 		DatagramPacket p = new DatagramPacket(bytes, bytes.length, ipAddress,
 				port);
 		socket.send(p);
-		System.out.println("Vi har sendt beskeden: " + msg);
 	}
 
 	public String receivePacket(String host, int port) throws IOException {
@@ -145,8 +136,6 @@ public class Network extends Thread {
 		try {
 			// 1. Prøv at forbinde til hosten
 			if (logon()) {
-				System.out.println("Forbundet til " + host
-						+ " port: " + port);
 				// 2: Start trådene som snakker med serveren
 				it = new InputThread();
 				ot = new OutputThread();
@@ -190,9 +179,7 @@ public class Network extends Thread {
 			try {
 				sendPacket(host, port, msg);
 			} catch (IOException e) {
-				System.out.println("Logoff failed!" + e.getMessage());
 			}
-			System.out.println(name + " has successfully been logged out!");
 			System.exit(0);
 		}
 
@@ -205,8 +192,6 @@ public class Network extends Thread {
 			try {
 				sendPacket(host, port, msg);
 			} catch (IOException e) {
-				System.out.println("Kunne ikke forbinde til "
-						+ host + " port: " + port);
 				e.printStackTrace();
 			}
 		}
@@ -241,12 +226,10 @@ public class Network extends Thread {
 					String state;
 					try {
 						state = receivePacket(host, port);
-						System.out.println("Server: " + state);
 						String[] stringArrayProtocol = state.split("\n", 2);
 						if (checkProtocol(stringArrayProtocol[0])) {
 							this.updateState(stringArrayProtocol[1]);
 						} else {
-								System.out.println("Protocol mismatch!");
 							}
 					} catch (IOException e) {
 						e.printStackTrace();
@@ -261,7 +244,6 @@ public class Network extends Thread {
 			playerUpdate = playerRow[i].split(" ");
 			Player p = gamePlayer.isIdValid(Integer.parseInt(playerUpdate[0]));
 			if(p != null) {
-				System.out.println(p);
 				//Opdater spillerens variabler
 				p.setXpos(Integer.parseInt(playerUpdate[1])); 
 				p.setYpos(Integer.parseInt(playerUpdate[2])); 
@@ -281,7 +263,6 @@ public class Network extends Thread {
 			}
 			i++;
 		}
-		System.out.println(gamePlayer.getPlayers());
 	}
 	}
 }
