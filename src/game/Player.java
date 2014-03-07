@@ -38,6 +38,12 @@ public class Player {
 	public int getXpos() {
 		return xpos;
 	}
+	
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
 
 	public void setXpos(int xpos) {
 		if (xpos != this.xpos) {

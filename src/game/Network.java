@@ -20,10 +20,9 @@ public class Network extends Thread {
 	private static final String protocolName = "Schwarzenegger";
 	private static final String protocolVersion = "1.0";
 	private static final int bufferSize = 65536;
-	private String name;
 	private String host = "localhost";
 	private int port = 7542;
-	private int id;
+	private String name;
 	private InputThread it;
 	private OutputThread ot;
 	
@@ -36,6 +35,7 @@ public class Network extends Thread {
 		} catch (SocketException e) {
 			e.printStackTrace();
 		}
+		//TODO //LAV NETWORK OM TIL EN TRÅD!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		run();
 	}
 
@@ -50,6 +50,7 @@ public class Network extends Thread {
 		} catch (SocketException e) {
 			e.printStackTrace();
 		}
+		//TODO //LAV NETWORK OM TIL EN TRÅD!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		run();
 	}
 
@@ -69,8 +70,6 @@ public class Network extends Thread {
 	public void sendShoot() {
 		ot.sendShoot();
 	}
-	
-
 	
 	public void sendMove(Direction direction) {
 		ot.sendMove(direction);
@@ -92,12 +91,16 @@ public class Network extends Thread {
 				received = receivePacket(host, port);
 			}
 			System.out.println(received);
-			String[] stringArrayProtocol = received.split("\n");
+			//Adskil greeting, login og userid, map
+			String[] stringArrayProtocol = received.split("\n", 3);
+			//Adskil login og userid
 			String[] stringArrayContent = stringArrayProtocol[1].split(" ");
 			if (checkProtocol(stringArrayProtocol[0])) {
 				if (stringArrayContent[0].equals("Granted")) {
 					System.out.println("Login granted!");
-					id = Integer.parseInt(stringArrayContent[1]);
+					int id = Integer.parseInt(stringArrayContent[1]);
+					String level = stringArrayProtocol[2];
+					gamePlayer.startGame(level, name ,id);
 					return true;
 				} else {
 					System.out.println("Login denied!");
@@ -141,7 +144,6 @@ public class Network extends Thread {
 			if (logon()) {
 				System.out.println("Forbundet til " + host
 						+ " port: " + port);
-				gamePlayer = new GamePlayer(new Player(name, id), this);
 				// 2: Start trådene som snakker med serveren
 				it = new InputThread();
 				ot = new OutputThread();

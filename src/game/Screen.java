@@ -9,70 +9,76 @@ import javax.swing.JLabel;
 
 
 public class Screen  extends JFrame {
-	private JLabel[][] labels = new JLabel[20][20];
+	private static final String nameOfTheGame = "Arnold Schwarzenegger!";
+	private static final ImageIcon wIcon = new ImageIcon("./Image/mur1.png");
+	private static final ImageIcon eIcon = new ImageIcon("./Image/gulv2.png");
+	private static final int fieldSizeX = 50, fieldSizeY = 50;
+	private static final ImageIcon[] heroIcons = new ImageIcon[] {
+		new ImageIcon("./Image/HeltOp.png"),
+		new ImageIcon("./Image/HeltNed.png"),
+		new ImageIcon("./Image/Heltvenstre.png"),
+		new ImageIcon("./Image/Helthoejre.png")
+	};
+			
+	private JLabel[][] labels;
 	
-	
-	
-	private String[][] level;
+	private String[] level;
+	int dimX, dimY;
 
 	
-	public Screen(String[][] level,int posX,int posY)
+	public Screen(String[] level)
 	{
-		super("TKgame v. 1.0");
+		super(nameOfTheGame);
 		this.level = level;
-	
+		dimY = level.length;
+		dimX = level[0].length();
+		this.labels = new JLabel[dimY][dimX];
+		
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		this.setLocation(100, 100);
 		this.setSize(500, 500);
 		this.setResizable(true);
-		this.setLayout(new GridLayout(20, 20, 0, 0));
-		draw(posX,posY);
+		this.setLayout(new GridLayout(dimX, dimY, 0, 0));
+		init();
 		this.setAlwaysOnTop(true);
 		this.repaint();
 		this.setVisible(true);
 	}
 	public void movePlayerOnScreen(int oldX, int oldY, int x, int y,Direction playerDirection) {
 	
-		labels[oldX][oldY].setIcon(new ImageIcon("./Image/Gulv2.png"));
+		labels[oldX][oldY].setIcon(eIcon);
 
-
-		if (playerDirection.equals(Direction.RIGHT)) {
-			labels[x][y].setIcon(
-					new ImageIcon("./Image/Helthoejre.png"));
-		};
-		if (playerDirection.equals(Direction.LEFT)) {
-			labels[x][y].setIcon(
-					new ImageIcon("./Image/Heltvenstre.png"));
-		};
-		if (playerDirection.equals(Direction.UP)) {
-			labels[x][y].setIcon(
-					new ImageIcon("./Image/HeltOp.png"));
-		};
-		if (playerDirection.equals(Direction.DOWN)) {
-			labels[x][y].setIcon(
-					new ImageIcon("./Image/HeltNed.png"));
-		};
-
-}
-	public void draw(int posX,int posY) {
-		for (int j = 0; j < 20; j++) {
-			for (int i = 0; i < 20; i++) {
-				if (level[i][j].equalsIgnoreCase("w")) {	
-					JLabel l = new JLabel(new ImageIcon("./Image/mur1.png"));
-					l.setSize(50, 50);
-					this.add(l);
-					labels[i][j] = l;
-				} else if (level[i][j].equalsIgnoreCase("e")) {
-					JLabel l = new JLabel(new ImageIcon("./Image/gulv2.png"));
-					l.setSize(50, 50);
-					this.add(l);
-					labels[i][j] = l;
+		labels[y][x].setIcon(heroIcons[playerDirection.ordinal()]);
+	}
+	
+	public void addPlayer(int posX, int posY, Direction direction) {
+		labels[posY][posX].setIcon(heroIcons[direction.ordinal()]);
+	}
+	
+	public void removePlayer(int posX, int posY) {
+		//TODO 
+	}
+	
+	private void init() {
+		for (int y = 0; y < dimY; y++) {
+			for (int x = 0; x < dimX; x++) {
+				JLabel field;
+				ImageIcon icon;
+				switch (level[y].charAt(x)) {
+				case 'e':
+					icon = eIcon;
+					break;
+				case 'w':
+				default:
+					icon = wIcon;
+					break;
 				}
+				field = new JLabel(icon);
+				field.setSize(fieldSizeX, fieldSizeY);
+				this.add(field);
+				labels[y][x] = field;
 				
 			}
-
 		}
-		labels[posX][posY].setIcon(
-				new ImageIcon("./Image/HeltOp.png"));
 	}
 }
