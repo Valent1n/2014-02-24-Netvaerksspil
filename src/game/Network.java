@@ -35,6 +35,7 @@ public class Network extends Thread {
 		} catch (SocketException e) {
 			e.printStackTrace();
 		}
+		//TODO //LAV NETWORK OM TIL EN TRÅD!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		run();
 	}
 
@@ -49,6 +50,7 @@ public class Network extends Thread {
 		} catch (SocketException e) {
 			e.printStackTrace();
 		}
+		//TODO //LAV NETWORK OM TIL EN TRÅD!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		run();
 	}
 
@@ -100,7 +102,7 @@ public class Network extends Thread {
 					System.out.println("Login granted!");
 					int id = Integer.parseInt(stringArrayContent[1]);
 					String level = stringArrayProtocol[2];
-					gamePlayer.startGame(name, level, id);
+					gamePlayer.startGame(level, name ,id);
 					return true;
 				} else {
 					System.out.println("Login denied!");
