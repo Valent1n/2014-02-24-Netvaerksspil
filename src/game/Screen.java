@@ -32,6 +32,7 @@ public class Screen  extends JFrame {
 		this.level = level;
 		dimY = level.length;
 		dimX = level[0].length();
+		this.labels = new JLabel[dimY][dimX];
 		
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		this.setLocation(100, 100);
@@ -52,6 +53,10 @@ public class Screen  extends JFrame {
 	
 	public void addPlayer(int posX, int posY, Direction direction) {
 		labels[posY][posX].setIcon(heroIcons[direction.ordinal()]);
+	}
+	
+	public void removePlayer(int posX, int posY) {
+		//TODO 
 	}
 	
 	private void init() {
