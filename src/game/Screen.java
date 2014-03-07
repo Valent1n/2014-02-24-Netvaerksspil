@@ -40,7 +40,7 @@ public class Screen  extends JFrame {
 		this.setResizable(true);
 		this.setLayout(new GridLayout(dimX, dimY, 0, 0));
 		init();
-		this.setAlwaysOnTop(true);
+//		this.setAlwaysOnTop(true);
 		this.repaint();
 		this.setVisible(true);
 	}
