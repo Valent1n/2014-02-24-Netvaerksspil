@@ -36,7 +36,7 @@ public class Network extends Thread {
 			e.printStackTrace();
 		}
 		//TODO //LAV NETWORK OM TIL EN TRÅD!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		run();
+		this.start();
 	}
 
 	
@@ -51,7 +51,7 @@ public class Network extends Thread {
 			e.printStackTrace();
 		}
 		//TODO //LAV NETWORK OM TIL EN TRÅD!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		run();
+		this.start();
 	}
 
 	public GamePlayer getGamePlayer() {

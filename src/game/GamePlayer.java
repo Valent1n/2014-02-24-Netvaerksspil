@@ -94,6 +94,8 @@ public class GamePlayer {
 
 	public GamePlayer() {
 		players = new ArrayList<Player>();
+		this.slist = new ScoreList(players);
+		slist.setVisible(true);
 	}
 	
 	public void startGame(String level, String name, int id){
