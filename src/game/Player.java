@@ -42,8 +42,9 @@ public class Player {
 
 	public void setXpos(int xpos) {
 		if (xpos != this.xpos) {
+			int oldX = xpos;
 			this.xpos = xpos;
-			notifyObservers();
+			notifyObservers(oldX, ypos);
 		}
 	}
 
@@ -53,8 +54,9 @@ public class Player {
 
 	public void setYpos(int ypos) {
 		if (ypos != this.ypos) {
+			int oldY = ypos;
 			this.ypos = ypos;
-			notifyObservers();
+			notifyObservers(xpos, oldY);
 		}
 	}
 
@@ -65,7 +67,7 @@ public class Player {
 	public void setDirection(Direction direction) {
 		if (direction != this.direction) {
 			this.direction = direction;
-			notifyObservers();
+			notifyObservers(xpos, ypos);
 		}
 	}
 
@@ -81,24 +83,24 @@ public class Player {
 	public void setPoint(int point) {
 		if (point != this.point) {
 			this.point = point;
-			notifyObservers();
+			notifyObservers(xpos, ypos);
 		}
 	}
 
 	public void addOnePoint() {
 		point++;
-		notifyObservers();
+		notifyObservers(xpos, ypos);
 	}
 
 	public void subOnePoint() {
 		point--;
-		notifyObservers();
+		notifyObservers(xpos, ypos);
 	}
 	
 	public void addPoints(int points) {
 		point += points;
 		if (points != 0) {
-			notifyObservers();
+			notifyObservers(xpos, ypos);
 		}
 	}
 
@@ -125,30 +127,18 @@ public class Player {
 		}
 	}
 	
-	private void notifyObservers() {
-		if (observationPaused) {
-			changedSinceLastNotify = true;
-			
-		} else {
-			List<PlayerObserver> copy;
-			synchronized (observers) {
-				copy = new ArrayList<>(observers);
-			}
-			for (PlayerObserver po : copy) {
-				po.update(this);
-			}
-			changedSinceLastNotify = false;
+	private void notifyObservers(int oldX, int oldY) {
+		
+		List<PlayerObserver> copy;
+		synchronized (observers) {
+			copy = new ArrayList<>(observers);
 		}
-	}
-	public void pauseObservation() {
-		observationPaused = true;
-	}
-	public void unpauseObservation() {
-		observationPaused = false;
-		if (changedSinceLastNotify) {
-			notifyObservers();
+		for (PlayerObserver po : copy) {
+			po.update(this, oldX, oldY);
 		}
+		changedSinceLastNotify = false;
 	}
+	
 	
 	
 }

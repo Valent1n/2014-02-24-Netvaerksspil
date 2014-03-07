@@ -8,7 +8,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 
-public class Screen  extends JFrame {
+public class Screen  extends JFrame implements PlayerObserver {
 	private static final String nameOfTheGame = "Arnold Schwarzenegger!";
 	private static final String wIcon = "./Image/mur1.png";
 	private static final String eIcon = "./Image/gulv2.png";
@@ -80,5 +80,10 @@ public class Screen  extends JFrame {
 				
 			}
 		}
+	}
+	@Override
+	public void update(Player player, int oldX, int oldY) {
+		movePlayerOnScreen(oldX, oldY, player.getXpos(), player.getYpos(), player.getDirection());
+		
 	}
 }

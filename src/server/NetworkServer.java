@@ -185,7 +185,7 @@ public class NetworkServer implements PlayerObserver, Closeable {
 		
 	}
 	@Override
-	public void update(Player player) {
+	public void update(Player player, int oldX, int oldY) {
 		sendStateThread.interrupt();
 		
 	}
