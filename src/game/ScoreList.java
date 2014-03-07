@@ -31,7 +31,7 @@ public class ScoreList extends JFrame {
 		this.setVisible(true);
 		this.players = players;
 		draw();
-		this.setAlwaysOnTop(true);
+//		this.setAlwaysOnTop(true);
 	}
 	public void draw() {
 		for (int j = 0; j < players.size(); j++) {
