@@ -71,10 +71,11 @@ public class GamePlayer {
 		//TODO
 		setMe(name, id);
 		createMap(level);
-//		ko = new KeyClass(this, me);
-//		screen = new Screen(this.level, me.getXpos(), me.getYpos());
-//		screen.setVisible(true);
-//		screen.addKeyListener(ko);
+		ko = new KeyClass(this, me);
+		screen = new Screen(this.level);
+		screen.addPlayer(me.getXpos(), me.getYpos(), me.getDirection());
+		screen.setVisible(true);
+		screen.addKeyListener(ko);
 	}
 	
 	public void createMap(String levelFromNetwork){
@@ -117,6 +118,36 @@ public class GamePlayer {
 
 	public void moveMe(Direction direction){
 		network.sendMove(direction);
+		// TODO Spilleren med id fra parameter bevæges
+				me.setDirection(direction);
+				int x = me.getXpos(), y = me.getYpos();
+				if (direction.equals(Direction.RIGHT)) {
+					x = me.getXpos() + 1;
+				}
+				;
+				if (direction.equals(Direction.LEFT)) {
+					x = me.getXpos() - 1;
+				}
+				;
+				if (direction.equals(Direction.UP)) {
+					y = me.getYpos() - 1;
+				}
+				;
+				if (direction.equals(Direction.DOWN)) {
+					y = me.getYpos() + 1;
+				}
+				;
+				if (level[y].charAt(x) == wall) {
+					me.subOnePoint();
+					slist.updateScoreOnScreen(me);
+				} else {
+					me.addOnePoint();
+					slist.updateScoreOnScreen(me);
+					screen.movePlayerOnScreen(me.getXpos(), me.getYpos(), x, y,
+							me.getDirection());
+					me.setXpos(x);
+					me.setYpos(y);
+				}
 	}
 	
 	public void shoot(){
@@ -125,39 +156,6 @@ public class GamePlayer {
 	
 	public void logOff() {
 		network.logOff();
-	}
-
-	public void PlayerMoved(Direction direction, Player player) {
-		// TODO Spilleren med id fra parameter bevæges
-		player.setDirection(direction);
-		int x = player.getXpos(), y = player.getYpos();
-		if (direction.equals(Direction.RIGHT)) {
-			x = player.getXpos() + 1;
-		}
-		;
-		if (direction.equals(Direction.LEFT)) {
-			x = player.getXpos() - 1;
-		}
-		;
-		if (direction.equals(Direction.UP)) {
-			y = player.getYpos() - 1;
-		}
-		;
-		if (direction.equals(Direction.DOWN)) {
-			y = player.getYpos() + 1;
-		}
-		;
-		if (level[y].charAt(x) == wall) {
-			player.subOnePoint();
-			slist.updateScoreOnScreen(player);
-		} else {
-			player.addOnePoint();
-			slist.updateScoreOnScreen(player);
-			screen.movePlayerOnScreen(player.getXpos(), player.getYpos(), x, y,
-					player.getDirection());
-			player.setXpos(x);
-			player.setYpos(y);
-		}
 	}
 
 	public Set<Player> getPlayers() {
