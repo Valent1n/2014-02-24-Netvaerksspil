@@ -26,6 +26,8 @@ public class Network extends Thread {
 	private InputThread it;
 	private OutputThread ot;
 	private static final int msBetweenPackets = 500; 
+	private int tempStartX = -1, tempStartY = -1;
+
 	
 	//  Temp constructor - bruger faste værdier af ip og port
 	public Network(String name, GamePlayer gamePlayer) {
@@ -36,7 +38,6 @@ public class Network extends Thread {
 		} catch (SocketException e) {
 			e.printStackTrace();
 		}
-		//TODO //LAV NETWORK OM TIL EN TRÅD!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		this.start();
 	}
 
@@ -51,7 +52,6 @@ public class Network extends Thread {
 		} catch (SocketException e) {
 			e.printStackTrace();
 		}
-		//TODO //LAV NETWORK OM TIL EN TRÅD!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		this.start();
 	}
 
@@ -101,7 +101,8 @@ public class Network extends Thread {
 					System.out.println("Login granted!");
 					int id = Integer.parseInt(stringArrayContent[1]);
 					String level = stringArrayProtocol[2];
-					gamePlayer.startGame(level, name ,id);
+					Player player = new Player(name, id, tempStartX, tempStartY);
+					gamePlayer.startGame(level, player);
 					return true;
 				} else {
 					System.out.println("Login denied!");
@@ -169,8 +170,10 @@ public class Network extends Thread {
 
 		public void run() {
 			while (true) {
-				if(!actionBuffer.isEmpty()){
-					sendAction();
+				synchronized (actionBuffer) {
+					if (!actionBuffer.isEmpty()) {
+						sendAction();
+					}
 				}
 				try {
 					synchronized (this) {
@@ -210,12 +213,16 @@ public class Network extends Thread {
 		
 		public void sendMove(Direction direction){
 			String msg = "\nmove" + direction.toString().toLowerCase();
-			actionBuffer.add(msg);
+			synchronized (actionBuffer) {
+				actionBuffer.add(msg);
+			}
 		}
 		
 		public void sendShoot(){
 			String msg = "\n" + "shoot";
-			actionBuffer.add(msg);
+			synchronized (actionBuffer) {
+				actionBuffer.add(msg);
+			}
 		}
 		
 		}
@@ -235,10 +242,9 @@ public class Network extends Thread {
 					try {
 						state = receivePacket(host, port);
 						System.out.println("Server: " + state);
-						String[] stringArrayProtocol = state.split("\n");
+						String[] stringArrayProtocol = state.split("\n", 2);
 						if (checkProtocol(stringArrayProtocol[0])) {
-							String[] content = Arrays.copyOfRange(stringArrayProtocol, 1, stringArrayProtocol.length);
-							this.updateState(content);
+							this.updateState(stringArrayProtocol[1]);
 						} else {
 								System.out.println("Protocol mismatch!");
 							}
@@ -248,26 +254,29 @@ public class Network extends Thread {
 			}		
 		}
 	
-	public void updateState(String[] content) {
+	public void updateState(String content) {
 		String[] playerUpdate;
-		for(int i = 0; i < content.length; i++) {
-			playerUpdate = content[i].split(" ");
+		String [] playerRow = content.split("\n");
+		for(int i = 0; i < playerRow.length; i++) {
+			playerUpdate = playerRow[i].split(" ");
 			Player p = gamePlayer.isIdValid(Integer.parseInt(playerUpdate[0]));
 			if(p != null) {
+				System.out.println(p);
 				//Opdater spillerens variabler
-				p.setXpos(Integer.parseInt(playerUpdate[1]));
-				p.setYpos(Integer.parseInt(playerUpdate[2]));
+				p.setXpos(Integer.parseInt(playerUpdate[1])); 
+				p.setYpos(Integer.parseInt(playerUpdate[2])); 
 				p.setPoint(Integer.parseInt(playerUpdate[3]));
 				p.setDirection(Direction.fromString(playerUpdate[5]));
 				gamePlayer.slist.updateScoreOnScreen(p);
 			} 
 			else{
 				// Opret ny spiller
-				p = new Player(playerUpdate[4], Integer.parseInt(playerUpdate[0]), 0, 0);
-				p.setXpos(Integer.parseInt(playerUpdate[1]));
-				p.setYpos(Integer.parseInt(playerUpdate[2]));
-				p.setPoint(Integer.parseInt(playerUpdate[3]));
-				p.setDirection(Direction.fromString(playerUpdate[5]));
+				p = new Player(playerUpdate[4], ///name
+								Integer.parseInt(playerUpdate[0]),  //id 
+								Integer.parseInt(playerUpdate[1]), 	//posX
+								Integer.parseInt(playerUpdate[2]),  //posY
+								Integer.parseInt(playerUpdate[3]),  //score
+								Direction.values()[Integer.parseInt(playerUpdate[5])] ); //direction
 				gamePlayer.addPlayer(p);
 			}
 			i++;

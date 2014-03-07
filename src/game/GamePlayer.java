@@ -7,104 +7,32 @@ import java.util.Set;
 
 public class GamePlayer {
 
-	// Players start values
-	// private String playerDirection = "up";
-
 	Player me;
 
 	private char wall = 'w';
-	private KeyClass ko;
+	private KeyClass keyController;
 	private List<Player> players;
 	private Network network;
 
 	ScoreList slist;
 
-	// level is defined column by column
 	private String[] level;
-//	private String[][] level = {
-//			{ "w", "w", "w", "w", "w", "w", "w", "w", "w", "w", "w", "w", "w",
-//					"w", "w", "w", "w", "w", "w", "w" },
-//			{ "w", "e", "e", "e", "e", "e", "e", "e", "e", "w", "w", "e", "e",
-//					"e", "e", "e", "e", "e", "e", "w" },
-//			{ "w", "e", "w", "e", "e", "w", "e", "e", "w", "w", "w", "e", "w",
-//					"e", "e", "w", "e", "e", "w", "w" },
-//			{ "w", "e", "w", "e", "e", "w", "e", "e", "e", "w", "w", "e", "w",
-//					"e", "e", "w", "e", "e", "w", "w" },
-//			{ "w", "e", "e", "w", "e", "e", "e", "e", "e", "e", "e", "e", "e",
-//					"e", "e", "e", "e", "e", "e", "w" },
-//			{ "w", "e", "w", "e", "w", "e", "w", "e", "w", "e", "w", "e", "w",
-//					"e", "e", "w", "e", "e", "w", "w" },
-//			{ "w", "e", "w", "e", "e", "e", "e", "e", "w", "w", "w", "e", "w",
-//					"e", "e", "w", "e", "e", "w", "w" },
-//			{ "w", "e", "w", "e", "e", "e", "e", "e", "w", "e", "w", "e", "w",
-//					"e", "e", "w", "e", "e", "w", "w" },
-//			{ "w", "e", "e", "e", "w", "e", "w", "e", "e", "w", "e", "e", "w",
-//					"e", "e", "w", "e", "e", "e", "w" },
-//			{ "w", "e", "e", "e", "e", "e", "w", "e", "e", "w", "e", "e", "w",
-//					"e", "e", "w", "e", "e", "e", "w" },
-//			{ "w", "e", "w", "w", "e", "w", "w", "e", "e", "e", "e", "e", "e",
-//					"e", "e", "w", "e", "e", "w", "w" },
-//			{ "w", "e", "e", "w", "e", "w", "e", "e", "e", "e", "w", "e", "e",
-//					"e", "e", "w", "e", "e", "w", "w" },
-//			{ "w", "e", "e", "e", "e", "e", "e", "e", "e", "w", "w", "e", "w",
-//					"e", "e", "w", "e", "e", "w", "w" },
-//			{ "w", "e", "e", "e", "e", "e", "e", "e", "e", "e", "w", "e", "w",
-//					"e", "e", "w", "e", "e", "w", "w" },
-//			{ "w", "e", "e", "e", "e", "e", "e", "e", "e", "w", "e", "e", "e",
-//					"e", "e", "w", "e", "e", "w", "w" },
-//			{ "w", "e", "e", "w", "e", "e", "e", "e", "e", "e", "e", "e", "e",
-//					"e", "e", "e", "e", "e", "w", "w" },
-//			{ "w", "e", "e", "w", "e", "w", "w", "w", "e", "e", "w", "e", "w",
-//					"e", "e", "w", "w", "e", "w", "w" },
-//			{ "w", "e", "w", "e", "e", "e", "e", "e", "e", "w", "w", "e", "w",
-//					"e", "e", "e", "e", "e", "w", "w" },
-//			{ "w", "e", "e", "e", "w", "e", "e", "e", "w", "w", "e", "e", "w",
-//					"e", "e", "e", "e", "e", "e", "w" },
-//			{ "w", "w", "w", "w", "w", "w", "w", "w", "w", "w", "w", "w", "w",
-//					"w", "w", "w", "w", "w", "w", "w" }, };
-	// level is defined column by column
 	Screen screen;
 
-	public GamePlayer(Player me, ScoreList s, String[] level, Network network) {
-		this.network = network;
-		players = new ArrayList<Player>();
-		this.level = level;
-		this.me = me;
-		players.add(me);
-		this.slist = s;
-		screen = new Screen(level);
-		screen.setVisible(true);
-		ko = new KeyClass(this, me);
-		screen.addKeyListener(ko);
-
-	}
-
-	public GamePlayer(Player me, Network network) {
-		this.network = network;
-		players = new ArrayList<Player>();
-		this.me = me;
-		players.add(me);
-		this.slist = new ScoreList(players);
-		slist.setVisible(true);
-		screen = new Screen(level);
-		screen.setVisible(true);
-		ko = new KeyClass(this, me);
-		screen.addKeyListener(ko);
-	}
 
 	public GamePlayer() {
 		players = new ArrayList<Player>();
 	}
 	
-	public void startGame(String level, String name, int id){
+	public void startGame(String level, Player me){
 		//TODO
-		setMe(name, id);
+		setMe(me);
 		createMap(level);
-		ko = new KeyClass(this, me);
+		keyController = new KeyClass(this, me);
 		screen = new Screen(this.level);
-		screen.addPlayer(me.getXpos(), me.getYpos(), me.getDirection());
+		screen.addPlayer(me);
 		screen.setVisible(true);
-		screen.addKeyListener(ko);
+		screen.addKeyListener(keyController);
 		this.slist = new ScoreList(players);
 		slist.setVisible(true);
 	}
@@ -126,24 +54,16 @@ public class GamePlayer {
 	}
 
 	public void setNetwork(Network network) {
-		System.out.println("LALALA");
 		this.network = network;
-		System.out.println(this.network);
 	}
 
 	public Player getMe() {
 		return me;
 	}
 
-	public void setMe(String name, int id) {
-		if(me == null){
-			me = new Player(name, id, 0, 0);
-			players.add(me);
-		} else{
-			if(players.contains(me)){
-				players.remove(me);
-			}
-			me = new Player(name, id, 0, 0);
+	public void setMe(Player me) {
+		this.me = me;
+		if (!players.contains(me)) {
 			players.add(me);
 		}
 		
@@ -174,8 +94,6 @@ public class GamePlayer {
 					me.subOnePoint();
 				} else {
 					me.addOnePoint();
-					screen.movePlayerOnScreen(me.getXpos(), me.getYpos(), x, y,
-							me.getDirection());
 					me.setXpos(x);
 					me.setYpos(y);
 				}
@@ -208,8 +126,10 @@ public class GamePlayer {
 	
 	public void addPlayer(Player p){
 		players.add(p);
+		screen.addPlayer(p);
+		p.addObserver(screen);
 		slist.players = players;
-		slist.updateScoreOnScreen(p);
+//		slist.updateScoreOnScreen(p);
 	}
 
 	// TODO Getplayerid, hvis id'et ikke findes i settet så oprettes spilleren,

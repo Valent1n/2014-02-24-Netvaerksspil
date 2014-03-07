@@ -18,6 +18,14 @@ public class Game {
 		System.out.println("Indtast dit spillernavn");
 		BufferedReader b = new BufferedReader (new InputStreamReader(System.in));
 		String username = b.readLine();
+
+//		System.out.println("Indtast Servernavn:");
+//		String serverName = b.readLine();
+
+//		players = new ArrayList<Player>();
+//		me = new Player(username, -1);
+//		players.add(me);
+
 		GamePlayer g = new GamePlayer();
 		Network network = new Network(username, g);
 		g.setNetwork(network);
