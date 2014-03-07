@@ -25,7 +25,7 @@ public class Network extends Thread {
 	private String name;
 	private InputThread it;
 	private OutputThread ot;
-	private static final int msBetweenPackets = 50; 
+	private static final int msBetweenPackets = 5000; 
 	
 	//  Temp constructor - bruger faste værdier af ip og port
 	public Network(String name, GamePlayer gamePlayer) {
@@ -124,6 +124,7 @@ public class Network extends Thread {
 		DatagramPacket p = new DatagramPacket(bytes, bytes.length, ipAddress,
 				port);
 		socket.send(p);
+		System.out.println("Vi har sendt beskeden: " + msg);
 	}
 
 	public String receivePacket(String host, int port) throws IOException {
@@ -180,7 +181,7 @@ public class Network extends Thread {
 		}
 		
 		public void logOff() {
-			String msg = protocolName + " " + protocolVersion + " Logoff";
+			String msg = protocolName + " " + protocolVersion + "\nLogoff";
 			try {
 				sendPacket(host, port, msg);
 			} catch (IOException e) {
