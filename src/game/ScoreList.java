@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.GridLayout;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -15,12 +16,12 @@ public class ScoreList extends JFrame {
 	/**
 	 * @param args
 	 */
-	ArrayList<Player> players;
+	List<Player> players;
 //	Player me;
 	private ArrayList<JLabel> labels = new ArrayList<JLabel>();
 
 	
-	public ScoreList( ArrayList<Player> players) {
+	public ScoreList( List<Player> players) {
 		super("TKgame v. 1.0");
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		this.setLocation(600,100);

@@ -68,11 +68,15 @@ public class Game {
 		players.add(me);
 		players.add(new Player("FUP", -2));
 		
-		ScoreList s = new ScoreList(players);
-		s.setVisible(true);
+//		Network network = new Network(username, null);
+//		GamePlayer g = new GamePlayer(me, network);
+//		network.setGamePlayer(g);
 		
+//		ScoreList s = new ScoreList(players);
+//		s.setVisible(true);
 		GamePlayer g = new GamePlayer();
-		g.setNetwork(new Network(username, g));
+		Network network = new Network(username, g);
+		g.setNetwork(network);
 	}
 
 }
