@@ -42,8 +42,12 @@ public class ScoreList extends JFrame {
 		}	
 	}	
 	public void updateScoreOnScreen(Player p) {
-		int playerno = players.indexOf(p);
-		labels.get((playerno)).setText(players.get(playerno).toString());
+		try {
+			int playerno = players.indexOf(p);
+			labels.get((playerno)).setText(players.get(playerno).toString());
+		} catch (Exception e) {
+			System.err.println("Scorelist is shitty");
+		}
 	}
 	
 	public void setPlayers(List<Player> players) {

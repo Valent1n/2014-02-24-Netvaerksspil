@@ -242,23 +242,28 @@ public class Network extends Thread {
 		String [] playerRow = content.split("\n");
 		for(int i = 0; i < playerRow.length; i++) {
 			playerUpdate = playerRow[i].split(" ");
-			Player p = gamePlayer.isIdValid(Integer.parseInt(playerUpdate[0]));
+			
+			int id = Integer.parseInt(playerUpdate[0]);
+			int xPos = Integer.parseInt(playerUpdate[1]);
+			int yPos = Integer.parseInt(playerUpdate[2]);
+			int score = Integer.parseInt(playerUpdate[3]);
+			String name = playerUpdate[4];
+			int directionNumber = Integer.parseInt(playerUpdate[5]);
+			Direction direction = Direction.values()[directionNumber]; 
+			
+			
+			Player p = gamePlayer.isIdValid(id);
 			if(p != null) {
 				//Opdater spillerens variabler
-				p.setXpos(Integer.parseInt(playerUpdate[1])); 
-				p.setYpos(Integer.parseInt(playerUpdate[2])); 
-				p.setPoint(Integer.parseInt(playerUpdate[3]));
-				p.setDirection(Direction.fromString(playerUpdate[5]));
+				p.setXpos(xPos); 
+				p.setYpos(yPos); 
+				p.setPoint(score);
+				p.setDirection(direction);
 				gamePlayer.slist.updateScoreOnScreen(p);
 			} 
 			else{
 				// Opret ny spiller
-				p = new Player(playerUpdate[4], ///name
-								Integer.parseInt(playerUpdate[0]),  //id 
-								Integer.parseInt(playerUpdate[1]), 	//posX
-								Integer.parseInt(playerUpdate[2]),  //posY
-								Integer.parseInt(playerUpdate[3]),  //score
-								Direction.values()[Integer.parseInt(playerUpdate[5])] ); //direction
+				p = new Player(name, id, xPos, yPos, score, direction);
 				gamePlayer.addPlayer(p);
 			}
 			i++;
