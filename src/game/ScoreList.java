@@ -44,7 +44,12 @@ public class ScoreList extends JFrame {
 	public void updateScoreOnScreen(Player p) {
 		int playerno = players.indexOf(p);
 		labels.get((playerno)).setText(players.get(playerno).toString());
-	}			
+	}
+	
+	public void setPlayers(List<Player> players) {
+		this.players = players;
+	}
+	
 	
 	
 
