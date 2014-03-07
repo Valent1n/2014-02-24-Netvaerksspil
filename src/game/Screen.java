@@ -45,14 +45,22 @@ public class Screen  extends JFrame implements PlayerObserver {
 		this.setVisible(true);
 	}
 	public void movePlayerOnScreen(int oldX, int oldY, int x, int y,Direction playerDirection) {
-	
-		labels[oldY][oldX].setIcon(new ImageIcon(eIcon));
-
-		labels[y][x].setIcon(new ImageIcon(heroIcons[playerDirection.ordinal()]));
+		if (!(oldX < 0 || oldY < 0)) {
+			
+			labels[oldY][oldX].setIcon(new ImageIcon(eIcon));
+		}
+		if ((! (x < 0 || y < 0)) && playerDirection != null) {
+			labels[y][x].setIcon(new ImageIcon(heroIcons[playerDirection.ordinal()]));
+		}
 	}
 	
-	public void addPlayer(int posX, int posY, Direction direction) {
-		labels[posY][posX].setIcon(new ImageIcon(heroIcons[direction.ordinal()]));
+	
+	public void addPlayer(Player player) {
+		if (! (player.getXpos() < 0 || player.getYpos() < 0)) {
+			labels[player.getXpos()][player.getYpos()]
+					.setIcon(new ImageIcon(heroIcons[player.getDirection().ordinal()]));
+		}
+		player.addObserver(this);
 	}
 	
 	public void removePlayer(int posX, int posY) {

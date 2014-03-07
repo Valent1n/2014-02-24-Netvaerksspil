@@ -123,7 +123,7 @@ public class GameServer implements Closeable {
 	}
 
 	public void movePlayer(ServerPlayer player, Direction direction) {
-		player.pauseObservation();
+//		player.pauseObservation();
 		player.setDirection(direction);
 		int newX = 0, newY = 0;
 		switch (direction) {
@@ -151,7 +151,7 @@ public class GameServer implements Closeable {
 			player.setYpos(newY);
 			player.addOnePoint();
 		}
-		player.unpauseObservation();
+//		player.unpauseObservation();
 	}
 	
 	public void shoot(ServerPlayer player) {

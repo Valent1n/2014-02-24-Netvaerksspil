@@ -2,6 +2,7 @@ package server;
 
 import java.net.InetAddress;
 
+import game.Direction;
 import game.Player;
 
 public class ServerPlayer extends Player {
