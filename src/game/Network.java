@@ -191,7 +191,6 @@ public class Network extends Thread {
 			}
 			System.out.println(name + " has successfully been logged out!");
 			System.exit(0);
-			// TODO: Kill application
 		}
 
 		public void sendAction(){
