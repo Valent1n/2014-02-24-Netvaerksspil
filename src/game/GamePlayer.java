@@ -94,8 +94,6 @@ public class GamePlayer {
 
 	public GamePlayer() {
 		players = new ArrayList<Player>();
-		this.slist = new ScoreList(players);
-		slist.setVisible(true);
 	}
 	
 	public void startGame(String level, String name, int id){
@@ -107,6 +105,8 @@ public class GamePlayer {
 		screen.addPlayer(me.getXpos(), me.getYpos(), me.getDirection());
 		screen.setVisible(true);
 		screen.addKeyListener(ko);
+		this.slist = new ScoreList(players);
+		slist.setVisible(true);
 	}
 	
 	public void createMap(String levelFromNetwork){
