@@ -1,8 +1,7 @@
 package game;
 
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -15,36 +14,43 @@ import java.util.List;
 
 public class Network extends Thread {
 
-	private static Network singleton;
 	private GamePlayer gamePlayer;
 	private DatagramSocket socket;
-	private ObjectOutputStream oos;
-	private ObjectInputStream ois;
 	private static final Charset charset = StandardCharsets.UTF_8;
 	private static final String protocolName = "Schwarzenegger";
 	private static final String protocolVersion = "1.0";
 	private static final int bufferSize = 65536;
-	private static final String host = "localhost";
-	private static final int port = 7542;
+	private String name;
+	private String host = "localhost";
+	private int port = 7542;
 	private int id;
 	private InputThread it;
 	private OutputThread ot;
-
-	private Network() {
+	
+	//  Temp constructor - bruger faste værdier af ip og port
+	public Network(String name, GamePlayer gamePlayer) {
+		this.name = name;
+		this.gamePlayer = gamePlayer;
 		try {
-			// 1. Opret en socket
 			socket = new DatagramSocket();
 		} catch (SocketException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		run();
 	}
 
-	public static Network getNetwork() {
-		if (singleton == null)
-			singleton = new Network();
-		return singleton;
+	
+	public Network(String name, String ip, int port, GamePlayer gamePlayer) {
+		this.name = name;
+		this.host = ip;
+		this.port = port;
+		this.gamePlayer = gamePlayer;
+		try {
+			socket = new DatagramSocket();
+		} catch (SocketException e) {
+			e.printStackTrace();
+		}
+		run();
 	}
 
 	public GamePlayer getGamePlayer() {
@@ -69,10 +75,14 @@ public class Network extends Thread {
 	public void sendMove(Direction direction) {
 		ot.sendMove(direction);
 	}
+	
+	public void logOff() {
+		ot.logOff();
+	}
 
-	public boolean logon(String host, int port, String brugernavn) {
+	public boolean logon() {
 		String msg = protocolName + " " + protocolVersion + "\n" + "Login"
-				+ " " + brugernavn;
+				+ " " + name;
 		System.out.println("Prøver at forbinde til " + host
 				+ " port: " + port);
 		try {
@@ -97,9 +107,8 @@ public class Network extends Thread {
 				System.out.println("Protocol mismatch.");
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			System.out.println("Kunne ikke forbinde til "
-					+ socket.getInetAddress() + " port: " + socket.getPort());
+					+ host + " port: " + port);
 			e.printStackTrace();
 			return false;
 		}
@@ -129,18 +138,16 @@ public class Network extends Thread {
 
 		try {
 			// 1. Prøv at forbinde til hosten
-			String brugernavn = "Lars";
-			if (logon(host, port, brugernavn)) {
-				System.out.println("Forbundet til " + socket.getInetAddress()
-						+ " port: " + socket.getPort());
-				gamePlayer = new GamePlayer(new Player(brugernavn, id), this);
+			if (logon()) {
+				System.out.println("Forbundet til " + host
+						+ " port: " + port);
+				gamePlayer = new GamePlayer(new Player(name, id), this);
 				// 2: Start trådene som snakker med serveren
 				it = new InputThread();
 				ot = new OutputThread();
 			}
 
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -161,6 +168,16 @@ public class Network extends Thread {
 				
 			}
 		}
+		
+		public void logOff() {
+			String msg = protocolName + " " + protocolVersion + " Logoff";
+			try {
+				sendPacket(host, port, msg);
+			} catch (IOException e) {
+				System.out.println("Logoff failed!" + e.getMessage());
+			}
+			
+		}
 
 		public void sendAction(){
 			String msg = protocolName + " " + protocolVersion;
@@ -171,9 +188,8 @@ public class Network extends Thread {
 			try {
 				sendPacket(host, port, msg);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				System.out.println("Kunne ikke forbinde til "
-						+ socket.getInetAddress() + " port: " + socket.getPort());
+						+ host + " port: " + port);
 				e.printStackTrace();
 			}
 		}
@@ -213,7 +229,6 @@ public class Network extends Thread {
 								System.out.println("Protocol mismatch!");
 							}
 					} catch (IOException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 			}		
