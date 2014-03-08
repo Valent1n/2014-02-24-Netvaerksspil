@@ -71,31 +71,28 @@ public class GamePlayer {
 
 	public void moveMe(Direction direction){
 		network.sendMove(direction);
-		// TODO Spilleren med id fra parameter bevæges
 				me.setDirection(direction);
 				int x = me.getXpos(), y = me.getYpos();
+				
 				if (direction.equals(Direction.RIGHT)) {
-					x = me.getXpos() + 1;
+					x += 1;
+				} else 	if (direction.equals(Direction.LEFT)) {
+					x -= 1;
+				} else if (direction.equals(Direction.UP)) {
+					y -= 1;
+				} else if (direction.equals(Direction.DOWN)) {
+					y += 1;
 				}
-				;
-				if (direction.equals(Direction.LEFT)) {
-					x = me.getXpos() - 1;
-				}
-				;
-				if (direction.equals(Direction.UP)) {
-					y = me.getYpos() - 1;
-				}
-				;
-				if (direction.equals(Direction.DOWN)) {
-					y = me.getYpos() + 1;
-				}
-				;
-				if (level[y].charAt(x) == wall) {
-					me.subOnePoint();
-				} else {
-					me.addOnePoint();
-					me.setXpos(x);
-					me.setYpos(y);
+				
+				try {
+					if (level[y].charAt(x) != wall) {
+						me.setXpos(x);
+						me.setYpos(y);
+					}
+				} catch (ArrayIndexOutOfBoundsException e) {
+					// TODO fixme
+					e.printStackTrace();
+					System.err.println("You tried to move to " + x + ", " + y + ", but failed");
 				}
 	}
 	

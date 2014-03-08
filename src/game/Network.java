@@ -26,7 +26,7 @@ public class Network extends Thread {
 	private InputThread it;
 	private OutputThread ot;
 	private static final int msBetweenPackets = 500; 
-	private int tempStartX = -1, tempStartY = -1;
+	private int tempStartX = 4, tempStartY = 5;
 
 	
 	//  Temp constructor - bruger faste værdier af ip og port
@@ -239,9 +239,9 @@ public class Network extends Thread {
 	
 	public void updateState(String content) {
 		String[] playerUpdate;
-		String [] playerRow = content.split("\n");
-		for(int i = 0; i < playerRow.length; i++) {
-			playerUpdate = playerRow[i].split(" ");
+		String [] playerRows = content.split("\n");
+		for(String playerRow : playerRows) {
+			playerUpdate = playerRow.split(" ");
 			
 			int id = Integer.parseInt(playerUpdate[0]);
 			int xPos = Integer.parseInt(playerUpdate[1]);
@@ -266,8 +266,7 @@ public class Network extends Thread {
 				p = new Player(name, id, xPos, yPos, score, direction);
 				gamePlayer.addPlayer(p);
 			}
-			i++;
 		}
 	}
-	}
+	}//end InputThread
 }
