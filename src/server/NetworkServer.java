@@ -23,7 +23,7 @@ public class NetworkServer implements PlayerObserver, Closeable {
 	public static final String protocolName = "Schwarzenegger";
 	public static final String protocolVersion = "1.0";
 	public static final long minStateDelayMs = 50;
-	public static final long maxStateDelayMs = 2000;
+	public static final long maxStateDelayMs = 20000;
 
 	private static final int socketTimeout = 2000;
 	private static final String versionRegex = " (\\d+(?:\\.\\d+)*)\n";
@@ -241,7 +241,7 @@ public class NetworkServer implements PlayerObserver, Closeable {
 					sendStatePackets();
 					waitPeriod = maxStateDelayMs;
 				} else {
-					waitPeriod = currentTime - lastStateSent + minStateDelayMs;
+					waitPeriod = lastStateSent + minStateDelayMs - currentTime;
 				}
 
 				try {
