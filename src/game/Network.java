@@ -14,14 +14,17 @@ import java.util.List;
 
 public class Network extends Thread {
 
+	public static final int defaultPort = 7542;
+	public static final String defaultHost = "localhost";
+	public static final String protocolName = "Schwarzenegger";
+	public static final String protocolVersion = "1.0";
+	private static final Charset charset = StandardCharsets.UTF_8;
+	private static final int bufferSize = 65536;
+	
 	private GamePlayer gamePlayer;
 	private DatagramSocket socket;
-	private static final Charset charset = StandardCharsets.UTF_8;
-	private static final String protocolName = "Schwarzenegger";
-	private static final String protocolVersion = "1.0";
-	private static final int bufferSize = 65536;
-	private String host = "localhost";
-	private int port = 7542;
+	private String host;
+	private int port;
 	private String name;
 	private InputThread it;
 	private OutputThread ot;
@@ -31,20 +34,13 @@ public class Network extends Thread {
 	
 	//  Temp constructor - bruger faste værdier af ip og port
 	public Network(String name, GamePlayer gamePlayer) {
-		this.name = name;
-		this.gamePlayer = gamePlayer;
-		try {
-			socket = new DatagramSocket();
-		} catch (SocketException e) {
-			e.printStackTrace();
-		}
-		this.start();
+		this(name, defaultHost, defaultPort, gamePlayer);
 	}
 
 	
-	public Network(String name, String ip, int port, GamePlayer gamePlayer) {
+	public Network(String name, String host, int port, GamePlayer gamePlayer) {
 		this.name = name;
-		this.host = ip;
+		this.host = host;
 		this.port = port;
 		this.gamePlayer = gamePlayer;
 		try {
