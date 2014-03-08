@@ -16,7 +16,7 @@ public class ScoreList extends JFrame implements PlayerObserver {
 	private Map<Player, JLabel> labels = new HashMap<>();
 	
 	public ScoreList( Collection<Player> players) {
-		super("TKgame v. 1.0");
+		super("Scores");
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		this.setLocation(600,100);
 		this.setSize(100, 500);
@@ -31,18 +31,14 @@ public class ScoreList extends JFrame implements PlayerObserver {
 	}
 
 	
-	public void updateScoreOnScreen(Player p) {
+	@Override
+	public void update(Player p, int oldX, int oldY) {
 		JLabel label = labels.get(p);
 		if (label == null) {
 			addPlayer(p);
 		} else {
 			label.setText(formatPlayer(p));
 		}
-	}
-	
-	@Override
-	public void update(Player player, int oldX, int oldY) {
-		updateScoreOnScreen(player);
 	}
 	
 	public void addPlayer(Player player) {

@@ -10,8 +10,8 @@ public class Game {
 	 * @param args
 	 *
 	 */
-	public static ArrayList<Player> players;
-	public static Player me;
+	private static ArrayList<Player> players;
+	private static Player me;
 	
 	public static void main(String[] args) throws Exception {
 	

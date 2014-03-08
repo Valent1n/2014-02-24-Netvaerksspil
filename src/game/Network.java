@@ -259,7 +259,6 @@ public class Network extends Thread {
 				p.setYpos(yPos); 
 				p.setPoint(score);
 				p.setDirection(direction);
-				gamePlayer.slist.updateScoreOnScreen(p);
 			} 
 			else{
 				// Opret ny spiller
