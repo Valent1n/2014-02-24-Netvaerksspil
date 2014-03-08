@@ -11,21 +11,17 @@ public class KeyClass implements KeyListener {
 	}
 
 	public void keyPressed(KeyEvent ke) {
-		if (ke.getKeyCode() == ke.VK_UP) {
+		int keyCode = ke.getKeyCode();
+		
+		if (keyCode == KeyEvent.VK_UP) {
 			g.moveMe(Direction.UP);
-			// TODO
-		}
-
-		if (ke.getKeyCode() == ke.VK_DOWN) {
+		} else if (keyCode == KeyEvent.VK_DOWN) {
 			g.moveMe(Direction.DOWN);
-		}
-		if (ke.getKeyCode() == ke.VK_LEFT) {
+		} else if (keyCode == KeyEvent.VK_LEFT) {
 			g.moveMe(Direction.LEFT);
-		}
-		if (ke.getKeyCode() == ke.VK_RIGHT) {
+		} else if (keyCode == KeyEvent.VK_RIGHT) {
 			g.moveMe(Direction.RIGHT);
-		}
-		if(ke.getKeyCode() == ke.VK_ESCAPE) {
+		} else if(keyCode == KeyEvent.VK_ESCAPE) {
 			System.out.println(g.getNetwork());
 			g.logOff();
 		}
