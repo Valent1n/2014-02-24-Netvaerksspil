@@ -13,7 +13,7 @@ import java.util.Set;
 
 public class GameServer implements Closeable {
 	
-	private static final long cleanupInactivityMs = 20000;
+	private static final long cleanupInactivityMs = 1000*60*5;
 	private static final long msBetweenCleanups = 2000;
 	private static final String[] defaultMapLayout = new String[] {
 		"wwwwwwwwwwwwww",
@@ -56,8 +56,8 @@ public class GameServer implements Closeable {
 		this.spawnY = spawnY;
 		mapDimX = mapLayout[0].length();
 		mapDimY = mapLayout.length;
-//		cleanupThread = new Thread(new CleanupThread());
-//		cleanupThread.start();
+		cleanupThread = new Thread(new CleanupThread());
+		cleanupThread.start();
 	}
 
 
@@ -107,6 +107,7 @@ public class GameServer implements Closeable {
 				}
 			}
 		}
+		System.out.println("Player "+out.getName()+" created");
 		return out;
 	}
 	
@@ -117,8 +118,8 @@ public class GameServer implements Closeable {
 
 	public void removePlayer(PortIP pip) {
 		synchronized (players) {
-			@SuppressWarnings("unused")
 			ServerPlayer player = players.remove(pip);
+			System.out.println("Player " + player.getName()+" removed");
 		}
 	}
 
