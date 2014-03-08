@@ -1,61 +1,65 @@
 package game;
 
-import java.awt.BorderLayout;
-import java.awt.Container;
 import java.awt.GridLayout;
-import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 
-public class ScoreList extends JFrame {
-
-	/**
-	 * @param args
-	 */
-	List<Player> players;
-//	Player me;
-	private ArrayList<JLabel> labels = new ArrayList<JLabel>();
+public class ScoreList extends JFrame implements PlayerObserver {
 
 	
-	public ScoreList( List<Player> players) {
+//	private ArrayList<JLabel> labels = new ArrayList<JLabel>();
+	private Map<Player, JLabel> labels = new HashMap<>();
+	
+	public ScoreList( Collection<Player> players) {
 		super("TKgame v. 1.0");
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		this.setLocation(600,100);
 		this.setSize(100, 500);
 		this.setResizable(true);
 		this.setLayout(new GridLayout(20, 20, 0, 0));
+		
+		for (Player player : players) {
+			addPlayer(player);
+		}
+		
 		this.setVisible(true);
-		this.players = players;
-		draw();
-//		this.setAlwaysOnTop(true);
 	}
-	public void draw() {
-		for (int j = 0; j < players.size(); j++) {
-				JLabel l = new JLabel(players.get(j).toString());
-				l.setSize(50,200);
-				this.add(l);
-				labels.add(l);
-		}	
-	}	
+
+	
 	public void updateScoreOnScreen(Player p) {
-		try {
-			int playerno = players.indexOf(p);
-			labels.get((playerno)).setText(players.get(playerno).toString());
-		} catch (Exception e) {
-			System.err.println("Scorelist is shitty");
+		JLabel label = labels.get(p);
+		if (label == null) {
+			addPlayer(p);
+		} else {
+			label.setText(formatPlayer(p));
 		}
 	}
 	
-	public void setPlayers(List<Player> players) {
-		this.players = players;
+	@Override
+	public void update(Player player, int oldX, int oldY) {
+		updateScoreOnScreen(player);
 	}
 	
+	public void addPlayer(Player player) {
+		JLabel label = new JLabel(formatPlayer(player));
+		this.add(label);
+		labels.put(player, label);
+	}
 	
-	
+	public void removePlayer(Player player) {
+		//TODO 
+	}
+
+	private String formatPlayer(Player player) {
+		//TODO 
+		return player.getName() + " " + player.getPoint();
+	}
+
 
 
 	

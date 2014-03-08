@@ -125,8 +125,8 @@ public class GamePlayer {
 		players.add(p);
 		screen.addPlayer(p);
 		p.addObserver(screen);
-		slist.players = players;
-//		slist.updateScoreOnScreen(p);
+		slist.addPlayer(p);
+		p.addObserver(slist);
 	}
 
 	// TODO Getplayerid, hvis id'et ikke findes i settet så oprettes spilleren,

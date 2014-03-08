@@ -8,7 +8,7 @@ import java.util.Set;
 
 public class Player {
 	private String name;
-	private int id;
+	private final int id;
 	private int xpos;
 	private int ypos;
 	private int point;
@@ -36,11 +36,6 @@ public class Player {
 
 	public int getXpos() {
 		return xpos;
-	}
-	
-
-	public void setId(int id) {
-		this.id = id;
 	}
 
 
@@ -141,6 +136,28 @@ public class Player {
 			po.update(this, oldX, oldY);
 		}
 		changedSinceLastNotify = false;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + id;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Player other = (Player) obj;
+		if (id != other.id)
+			return false;
+		return true;
 	}
 	
 	
