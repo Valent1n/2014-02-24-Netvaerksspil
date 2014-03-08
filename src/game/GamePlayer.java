@@ -1,9 +1,7 @@
 package game;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class GamePlayer {
 
@@ -25,16 +23,15 @@ public class GamePlayer {
 	}
 	
 	public void startGame(String level, Player me){
-		//TODO
 		setMe(me);
 		createMap(level);
+		this.slist = new ScoreList(players);
+		slist.setVisible(true);
 		keyController = new KeyClass(this, me);
 		screen = new Screen(this.level);
 		screen.addPlayer(me);
 		screen.setVisible(true);
 		screen.addKeyListener(keyController);
-		this.slist = new ScoreList(players);
-		slist.setVisible(true);
 	}
 	
 	public void createMap(String levelFromNetwork){
