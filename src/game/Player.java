@@ -35,7 +35,7 @@ public class Player {
 
 	public void setXpos(int xpos) {
 		if (xpos != this.xpos) {
-			int oldX = xpos;
+			int oldX = this.xpos;
 			this.xpos = xpos;
 			notifyObservers(oldX, ypos);
 		}
@@ -47,7 +47,7 @@ public class Player {
 
 	public void setYpos(int ypos) {
 		if (ypos != this.ypos) {
-			int oldY = ypos;
+			int oldY = this.ypos;
 			this.ypos = ypos;
 			notifyObservers(xpos, oldY);
 		}
