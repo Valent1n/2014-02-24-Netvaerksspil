@@ -15,8 +15,8 @@ public class Screen  extends JFrame implements PlayerObserver {
 	private static final String eIcon = "./Image/gulv2.png";
 	private static final int fieldSizeX = 50, fieldSizeY = 50;
 	private static final String[] heroIcons = new String[] {
-		"./Image/HeltOp.png",
-		"./Image/HeltNed.png",
+		"./Image/HeltOp.png",		//this must follow the same order as in the 
+		"./Image/HeltNed.png",		//game.Direction enum
 		"./Image/Heltvenstre.png",
 		"./Image/Helthoejre.png"
 	};
@@ -57,6 +57,7 @@ public class Screen  extends JFrame implements PlayerObserver {
 		if ((! (x < 0 || y < 0 || x > dimX || y > dimY)) && playerDirection != null) {
 			labels[y][x].setIcon(new ImageIcon(heroIcons[playerDirection.ordinal()]));
 		}
+		this.repaint();
 	}
 	
 	
@@ -86,7 +87,8 @@ public class Screen  extends JFrame implements PlayerObserver {
 					icon = wIcon;
 					break;
 				}
-				field = new JLabel(new ImageIcon(icon));
+				field = new JLabel();
+				field.setIcon(new ImageIcon(icon));
 				field.setSize(fieldSizeX, fieldSizeY);
 				this.add(field);
 				labels[y][x] = field;
