@@ -19,7 +19,7 @@ public class GamePlayer {
 
 
 	public GamePlayer() {
-		players = new ArrayList<Player>();
+		players = new ArrayList<>();
 	}
 	
 	public void startGame(String level, Player me){

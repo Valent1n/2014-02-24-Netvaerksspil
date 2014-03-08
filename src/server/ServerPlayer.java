@@ -1,9 +1,8 @@
 package server;
 
-import java.net.InetAddress;
-
-import game.Direction;
 import game.Player;
+
+import java.net.InetAddress;
 
 public class ServerPlayer extends Player {
 

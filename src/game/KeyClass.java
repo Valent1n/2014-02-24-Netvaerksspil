@@ -28,10 +28,10 @@ public class KeyClass implements KeyListener {
 	}
 
 		public void keyReleased(KeyEvent ke) {
-			
+			//Do Nothing
 		}
 
 		public void keyTyped(KeyEvent arg0) {
-			
+			//Do Nothing
 		}
 }

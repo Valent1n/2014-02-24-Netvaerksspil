@@ -25,7 +25,7 @@ public class Game {
 				String portString = b.readLine();
 				try {
 					serverPort = Integer.parseInt(portString);
-				} catch (Exception e) {}
+				} catch (Exception e) {/*Do nothing, we'll loop*/}
 			}
 			network = new Network(username, serverName, serverPort, g);
 		}

@@ -107,7 +107,9 @@ public class GameServer implements Closeable {
 				}
 			}
 		}
-		System.out.println("Player "+out.getName()+" created");
+		if (out != null) {
+			System.out.println("Player " + out.getName() + " created");
+		}
 		return out;
 	}
 	
@@ -139,6 +141,8 @@ public class GameServer implements Closeable {
 			break;
 		case RIGHT:
 			newX += 1;
+			break;
+		default:
 			break;
 		}
 		newX += player.getXpos();

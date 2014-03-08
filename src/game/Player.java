@@ -1,9 +1,7 @@
 package game;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 
 public class Player {
@@ -14,8 +12,6 @@ public class Player {
 	private int point;
 	private Direction direction;
 	private List<PlayerObserver> observers;
-	private boolean observationPaused;
-	private boolean changedSinceLastNotify;
 	
 	public Player(String name, int id, int xpos, int ypos, int score, Direction direction) {
 		this.id = id;
@@ -25,8 +21,6 @@ public class Player {
 		point = score;
 		this.direction = direction;
 		observers = new ArrayList<>();
-		observationPaused = false;
-		changedSinceLastNotify = false;
 	}
 	
 	public Player(String name, int id, int xpos, int ypos) {
@@ -135,7 +129,6 @@ public class Player {
 		for (PlayerObserver po : copy) {
 			po.update(this, oldX, oldY);
 		}
-		changedSinceLastNotify = false;
 	}
 
 	@Override

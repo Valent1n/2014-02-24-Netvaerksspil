@@ -3,7 +3,6 @@ package game;
 import java.awt.GridLayout;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.swing.JFrame;
@@ -48,11 +47,11 @@ public class ScoreList extends JFrame implements PlayerObserver {
 	}
 	
 	public void removePlayer(Player player) {
-		//TODO 
+		JLabel l = labels.remove(player);
+		this.remove(l);
 	}
 
-	private String formatPlayer(Player player) {
-		//TODO 
+	private static String formatPlayer(Player player) {
 		return player.getName() + " " + player.getPoint();
 	}
 

@@ -1,14 +1,12 @@
 package game;
 
 import java.io.IOException;
-
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -26,6 +24,7 @@ public class Network extends Thread {
 	private String host;
 	private int port;
 	private String name;
+	@SuppressWarnings("unused")
 	private InputThread it;
 	private OutputThread ot;
 	private static final int msBetweenPackets = 500; 
@@ -97,9 +96,11 @@ public class Network extends Thread {
 					gamePlayer.startGame(level, player);
 					return true;
 				} else {
+					//TODO Error - login denied
 				}
 
 			} else {
+				//TODO throw error - protocol mismatch
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -142,12 +143,13 @@ public class Network extends Thread {
 		}
 
 		while (true) {
+			//TODO make better
 		}
 	}
 
 	class OutputThread extends Thread {
 		
-		private List<String> actionBuffer = new LinkedList<String>();
+		private List<String> actionBuffer = new LinkedList<>();
 
 		public OutputThread() throws IOException {
 			this.start();
@@ -175,6 +177,7 @@ public class Network extends Thread {
 			try {
 				sendPacket(host, port, msg);
 			} catch (IOException e) {
+				//Do nothing
 			}
 			System.exit(0);
 		}
@@ -225,8 +228,7 @@ public class Network extends Thread {
 						String[] stringArrayProtocol = state.split("\n", 2);
 						if (checkProtocol(stringArrayProtocol[0])) {
 							this.updateState(stringArrayProtocol[1]);
-						} else {
-							}
+						}
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
