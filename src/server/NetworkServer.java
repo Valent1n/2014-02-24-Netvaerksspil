@@ -77,7 +77,9 @@ public class NetworkServer implements PlayerObserver, Closeable {
 		Matcher actionMatch = actionsPatt.matcher(data);
 		if (actionMatch.matches()) {
 			ServerPlayer player = gameServer.getPlayer(address, port);
-			handleActionPacket(actionMatch.group(2), player);
+			if (player != null) {
+				handleActionPacket(actionMatch.group(2), player);
+			}
 			return;
 		}
 		Matcher loginMatch = loginPatt.matcher(data);
