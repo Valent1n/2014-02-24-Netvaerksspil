@@ -27,7 +27,8 @@ public class Network extends Thread {
 	@SuppressWarnings("unused")
 	private InputThread it;
 	private OutputThread ot;
-	private static final int msBetweenPackets = 500; 
+	private static final long minActionDelayMs = 50;
+	private static final long maxActionDelayMs = 5000;
 	private int tempStartX = 4, tempStartY = 5;
 
 	
@@ -156,15 +157,25 @@ public class Network extends Thread {
 		}
 
 		public void run() {
+			long lastActionPacketSent = 0;
+			long waitPeriod;
 			while (true) {
-				synchronized (actionBuffer) {
-					if (!actionBuffer.isEmpty()) {
-						sendAction();
-					}
+				long currentTime = System.currentTimeMillis();
+				long msUntilPacketCanBeSent = lastActionPacketSent + minActionDelayMs - currentTime;
+				
+				if (msUntilPacketCanBeSent <= 0) {
+					lastActionPacketSent = currentTime;
+					sendAction();
+					waitPeriod = maxActionDelayMs;
+					
+				} else {
+					waitPeriod = msUntilPacketCanBeSent;
 				}
+				
+				
 				try {
 					synchronized (this) {
-						wait(msBetweenPackets);
+						wait(waitPeriod);
 					}
 				} catch (InterruptedException e) {
 					/*nothing*/
@@ -184,10 +195,15 @@ public class Network extends Thread {
 
 		public void sendAction(){
 			String msg = protocolName + " " + protocolVersion;
-			for(String action : actionBuffer){
-			msg += action;
+			synchronized (actionBuffer) {
+				for (String action : actionBuffer) {
+					msg += action;
+				}
+				if (actionBuffer.size() == 0) {
+					msg += "\n";
+				}
+				actionBuffer.clear();
 			}
-			actionBuffer.clear();
 			try {
 				sendPacket(host, port, msg);
 			} catch (IOException e) {
@@ -200,6 +216,7 @@ public class Network extends Thread {
 			synchronized (actionBuffer) {
 				actionBuffer.add(msg);
 			}
+			ot.interrupt();
 		}
 		
 		public void sendShoot(){
