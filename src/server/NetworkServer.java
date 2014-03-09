@@ -23,7 +23,7 @@ public class NetworkServer implements PlayerObserver, Closeable {
 	public static final String protocolName = "Schwarzenegger";
 	public static final String protocolVersion = "1.0";
 	public static final long minStateDelayMs = 50;
-	public static final long maxStateDelayMs = 20000;
+	public static final long maxStateDelayMs = 5000;
 
 	private static final int socketTimeout = 2000;
 	private static final String versionRegex = " (\\d+(?:\\.\\d+)*)\n";

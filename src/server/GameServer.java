@@ -13,7 +13,7 @@ import java.util.Set;
 
 public class GameServer implements Closeable {
 	
-	private static final long cleanupInactivityMs = 1000*60*5;
+	private static final long cleanupInactivityMs = 1000*20;
 	private static final long msBetweenCleanups = 2000;
 	private static final String[] defaultMapLayout = new String[] {
 		"wwwwwwwwwwwwww",
