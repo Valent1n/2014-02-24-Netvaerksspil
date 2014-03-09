@@ -137,18 +137,20 @@ public class NetworkServer implements PlayerObserver, Closeable {
 	}
 
 	private void handleActionPacket(String actions, ServerPlayer player) {
-		player.registerLifeSign();
-		for (String action : actions.split("\n")) {
-			Matcher moveMatch = movePatt.matcher(action);
-			if (moveMatch.matches()) {
-				String directionString = moveMatch.group(1);
-				Direction direction = Direction.fromString(directionString);
-				gameServer.movePlayer(player, direction);
-				continue;
-			}
-			Matcher shootMatch = shootPatt.matcher(action);
-			if (shootMatch.matches()) {
-				gameServer.shoot(player);
+		synchronized (player) {
+			player.registerLifeSign();
+			for (String action : actions.split("\n")) {
+				Matcher moveMatch = movePatt.matcher(action);
+				if (moveMatch.matches()) {
+					String directionString = moveMatch.group(1);
+					Direction direction = Direction.fromString(directionString);
+					gameServer.movePlayer(player, direction);
+					continue;
+				}
+				Matcher shootMatch = shootPatt.matcher(action);
+				if (shootMatch.matches()) {
+					gameServer.shoot(player);
+				}
 			}
 		}
 	}
@@ -175,14 +177,14 @@ public class NetworkServer implements PlayerObserver, Closeable {
 
 		String pattern = "\n%d %d %d %d %s %d";
 		for (ServerPlayer p : players) {
-			String line = String.format(pattern, p.getId(), p.getXpos(), p
-					.getYpos(), p.getPoint(), p.getName(), p.getDirection()
-					.ordinal());
+			String line;
+			synchronized (p) {
+				line = String.format(pattern, p.getId(), p.getXpos(), p
+						.getYpos(), p.getPoint(), p.getName(), p.getDirection()
+						.ordinal());
+			}
 			sb.append(line);
-			// String hej = "\n" + p.getId() + " " + p.getXpos() + " " +
-			// p.getYpos() + " " + p.getPoint() + " " + p.getName() + " " +
-			// p.getDirection().ordinal();
-			// sb.append(hej);
+
 		}
 		byte[] bytes = sb.toString().getBytes(charset);
 
