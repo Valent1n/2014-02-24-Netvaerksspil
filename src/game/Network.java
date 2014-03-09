@@ -267,7 +267,7 @@ public class Network extends Thread {
 			Direction direction = Direction.values()[directionNumber]; 
 			
 			
-			Player p = gamePlayer.isIdValid(id);
+			Player p = gamePlayer.getPlayer(id);
 			if(p != null) {
 				//Opdater spillerens variabler
 				p.setXpos(xPos); 

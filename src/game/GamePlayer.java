@@ -25,13 +25,14 @@ public class GamePlayer {
 	public void startGame(String level, Player me){
 		setMe(me);
 		createMap(level);
-		this.slist = new ScoreList(players);
-		slist.setVisible(true);
+		slist = new ScoreList();
 		keyController = new KeyClass(this, me);
 		screen = new Screen(this.level);
-		screen.addPlayer(me);
-		screen.setVisible(true);
 		screen.addKeyListener(keyController);
+		for (Player p : players) {
+			screen.addPlayer(p);
+			slist.addPlayer(p);
+		}
 	}
 	
 	public void createMap(String levelFromNetwork){
@@ -109,7 +110,7 @@ public class GamePlayer {
 		this.players = players;
 	}
 
-	public Player isIdValid(int id) {
+	public Player getPlayer(int id) {
 		for (Player p : this.getPlayers()) {
 			if (p.getId() == id) {
 				return p;

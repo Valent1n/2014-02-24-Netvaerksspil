@@ -15,16 +15,21 @@ public class ScoreList extends JFrame implements PlayerObserver {
 	private Map<Player, JLabel> labels = new HashMap<>();
 	
 	public ScoreList( Collection<Player> players) {
+		this();
+		if (players != null) {
+			for (Player player : players) {
+				addPlayer(player);
+			}
+		}
+	}
+	
+	public ScoreList() {
 		super("Scores");
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		this.setLocation(600,100);
 		this.setSize(100, 500);
 		this.setResizable(true);
 		this.setLayout(new GridLayout(20, 20, 0, 0));
-		
-		for (Player player : players) {
-			addPlayer(player);
-		}
 		
 		this.setVisible(true);
 	}
@@ -41,18 +46,21 @@ public class ScoreList extends JFrame implements PlayerObserver {
 	}
 	
 	public void addPlayer(Player player) {
-		JLabel label = new JLabel(formatPlayer(player));
+		JLabel label = new JLabel();
 		this.add(label);
+		label.setText(formatPlayer(player));
 		labels.put(player, label);
+		player.addObserver(this);
 	}
 	
 	public void removePlayer(Player player) {
 		JLabel l = labels.remove(player);
 		this.remove(l);
+		player.removeObserver(this);
 	}
 
 	private static String formatPlayer(Player player) {
-		return player.getName() + " " + player.getPoint();
+		return player.getName() + ":  " + player.getPoint();
 	}
 
 
