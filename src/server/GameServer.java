@@ -121,7 +121,9 @@ public class GameServer implements Closeable {
 	public void removePlayer(PortIP pip) {
 		synchronized (players) {
 			ServerPlayer player = players.remove(pip);
-			System.out.println("Player " + player.getName()+" removed");
+			if (player != null) {
+				System.out.println("Player " + player.getName() + " removed");
+			}
 		}
 	}
 
